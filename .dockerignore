@@ -1,0 +1,4 @@
+apps/mongodb/data
+node_modules/
+.nx
+.vscode
