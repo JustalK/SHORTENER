@@ -1,0 +1,41 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "compilerOptions": {
+    "moduleDetection": "force",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@dbs/*": [
+        "./src/dbs/*"
+      ],
+      "@interfaces/*": [
+        "./src/interfaces/*"
+      ],
+      "@libs/*": [
+        "./src/libs/*"
+      ],
+      "@models/*": [
+        "./src/models/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@src/*": [
+        "./src/*"
+      ],
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "shortener-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/shortener-api/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "shortener-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "shortener-api:build:development"
+        },
+        "production": {
+          "buildTarget": "shortener-api:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

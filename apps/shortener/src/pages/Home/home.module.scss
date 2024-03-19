@@ -1,0 +1,97 @@
+.home {
+    &__card {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        &__title {
+            font: bold 36px asap, arial;
+            color: #555;
+            letter-spacing: -1px;
+
+            @media screen and (max-width: 720px) {
+                font-size: 25px;
+            }
+        }
+
+        &__error {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+        }
+
+        &__loading {
+            position: relative;
+
+            &__spinner {
+                position: absolute;
+                z-index: 10;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        &__result,
+        &__form {
+            display: table;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+
+            &__button {
+                display: table-cell;
+                width: 1%;
+                box-sizing: border-box;
+                vertical-align: middle;
+
+                @media screen and (max-width: 720px) {
+                    display: block;
+                    width: initial;
+                }
+            }
+
+            @media screen and (max-width: 720px) {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+        }
+
+        &__long {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+
+            &__span {
+                display: flex;
+
+                &__url {
+                    margin-left: 5px;
+                    max-width: 200px;
+                    display: block;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    width: 160px;
+                    height: 1.2em;
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        &__error,
+        &__long,
+        &__result {
+            transition: all 0.2s ease-in;
+            opacity: 1;
+
+            &--loading {
+                opacity: 0;
+            }
+        }
+    }
+}

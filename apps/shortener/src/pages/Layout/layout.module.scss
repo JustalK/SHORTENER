@@ -1,0 +1,23 @@
+@import "../../styles/colors";
+
+.layout {
+    background: $background-color;
+    min-height: 100vh;
+
+    &__wrapper {
+        margin: auto 15%;
+
+        &__h1 {
+            font: bold 40px asap, arial;
+            text-align: center;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            text-transform: uppercase;
+            color: $color-blue;
+        }
+
+        @media screen and (max-width: 720px) {
+            margin: auto 20px;
+        }
+    }
+}
