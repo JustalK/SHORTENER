@@ -96,7 +96,7 @@ $ npm run up
 
 In order to be the closest of possible of the production, modify the `/etc/hosts` with the following:
 
-````
+```bash
 127.0.0.1 shortener.net mongodb server1
 ```
 
