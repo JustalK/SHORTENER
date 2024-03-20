@@ -50,4 +50,8 @@ export const ERROR = {
     KEY: 'X0009',
     MESSAGE: 'This is not a valid link',
   },
+  X0010: {
+    KEY: 'X0010',
+    MESSAGE: 'No Link Found',
+  },
 };

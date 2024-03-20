@@ -26,7 +26,7 @@ const utils = {
   createRandomString: (length: number) => {
     const id = nanoid();
     return id.slice(0, id.length < length ? length : id.length);
-  },
+  }
 };
 
 export default utils;

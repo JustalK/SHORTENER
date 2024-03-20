@@ -48,8 +48,8 @@ const shader = {
 			}
 			void main() {
 				vec3 color = vec3(0.45, 0.45, 1.0);
-				vec3 colorHover = vec3(1.0, 1.0, 1.0);
-				float circleMouse = circle(vUv, uMouse, 0.01, 1.0);
+				vec3 colorHover = vec3(1.0, 0.45, 2.0);
+				float circleMouse = circle(vUv, uMouse, 0.01, 0.5);
 				float cornerLeftBottom = circle(vUv, vec2(0, 0), 0.05, 4.0);
         float cornerRightTop = circle(vUv, vec2(1, 1), 0.0005, 4.0);
 				float maskLeftBottom = smoothstep(0.35, 0.5, cornerLeftBottom);

@@ -22,6 +22,7 @@ const ENVIRONMENT = {
     LOG_LEVEL: process.env.API_LOG_LEVEL,
   },
   APP: {
+    FRONT_URL: process.env.FRONT_URL,
     EXPIRATION_IN_MINUTE: Number(process.env.EXPIRATION_IN_MINUTE),
   },
   DATABASE: {

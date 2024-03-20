@@ -9,6 +9,7 @@ import exceptionService from '@services/exception';
 import { ShortenerServiceType, ShortenerType } from '@interfaces/shortener';
 import { ExceptionServiceType, ExceptionType } from '@interfaces/error';
 import { STATUS, ERROR } from '@libs/constants';
+import ENVIRONMENT from '@src/environment';
 import Base from '@libs/base';
 const router = express.Router();
 
@@ -90,17 +91,13 @@ class RedirectRoutes extends Base {
     }
 
     if (!tmpShortened) {
-      const notFoundError = this.#exceptionService.createException(
-        ERROR.X0007.KEY
-      );
-      return res.status(STATUS.NOT_FOUND).send({ error: notFoundError });
+      return res.redirect(STATUS.REDIRECT, `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0010.KEY}`);
     }
 
     const isExpired = this.#shortenerService.isExpired(tmpShortened);
 
     if (isExpired) {
-      const expired = this.#exceptionService.createException(ERROR.X0008.KEY);
-      return res.status(STATUS.EXPIRED).send({ error: expired });
+      return res.redirect(STATUS.REDIRECT, `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0008.KEY}`);
     }
 
     const { longURL } = tmpShortened;

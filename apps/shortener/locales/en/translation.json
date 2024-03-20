@@ -18,14 +18,15 @@
     "common": {
         "errors": {
             "X0001": "You need a body",
-            "X0002": "You need a longURL parameter",
+            "X0002": "You need a long URL parameter",
             "X0003": "This is not a valid URL",
             "X0004": "Unexpected error occured",
             "X0005": "You need a query",
             "X0006": "You need a short query parameter",
             "X0007": "No short url found",
             "X0008": "Link expired",
-            "X0009": "This is not a valid link"
+            "X0009": "This is not a valid link",
+            "X0010": "No link found"
         }
     }
 }

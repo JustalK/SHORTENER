@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nx run-many --parallel --target=serve --projects=shortener,shortener-api",
     "start": "nx reset && nx build shortener --prod --emptyOutDir && nx serve shortener-api --prod",
+    "e2e": "nx e2e shortener-e2e",
     "up": "docker compose up --build -d",
     "down": "docker compose down"
   },

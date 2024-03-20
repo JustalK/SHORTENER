@@ -12,12 +12,14 @@ export function Input({
   name,
   value,
   onChange,
+  dataCy,
   placeholder,
   disabled = false,
 }: {
   name: string;
   value: string | number | readonly string[] | undefined;
   placeholder?: string;
+  dataCy: string;
   onChange?: undefined | React.ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
 }) {
@@ -25,6 +27,7 @@ export function Input({
     <input
       className={styles.input}
       name={name}
+      data-cy={dataCy}
       value={value}
       onChange={onChange}
       placeholder={placeholder}

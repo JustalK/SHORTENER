@@ -59,10 +59,7 @@ class Server extends Base {
       `/${ENVIRONMENT.API.VERSION}/shortener`,
       require('@routes/shortener')
     );
-    this.#app.use(
-      `/${ENVIRONMENT.API.VERSION}/server`,
-      require('@routes/server')
-    );
+    this.#app.use('/', require('@routes/server'));
   }
 
   /**

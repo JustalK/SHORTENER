@@ -43,9 +43,11 @@ export const init3D = (canvas: any) => {
   function animate() {
     requestAnimationFrame(animate);
 
-    backgroundMaterial.uniforms.uTime.value = clock.getElapsedTime();
+    if (clock.getDelta() > 1 / 60) {
+      backgroundMaterial.uniforms.uTime.value = clock.getElapsedTime();
 
-    renderer.render(scene, camera);
+      renderer.render(scene, camera);
+    }
   }
 
   animate();

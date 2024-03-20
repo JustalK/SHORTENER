@@ -47,6 +47,7 @@ export function Home() {
       if (refTimer.current) {
         clearTimeout(refTimer.current);
       }
+      window.history.replaceState(null, '', window.location.pathname);
       const response = await postShortenURL(searchURL);
       if (response && response.error) {
         setError(response.error.message);
@@ -128,7 +129,7 @@ export function Home() {
     refTimerResize.current = setTimeout(() => {
       if (refCamera?.current && refRenderer?.current && refMaterial?.current) {
         refMaterial.current.uniforms.uResolution.value = new THREE.Vector2(
-          1.0,
+          window.innerHeight / window.innerWidth,
           window.innerHeight / window.innerWidth
         );
         refCamera.current.aspect = window.innerWidth / window.innerHeight;
@@ -163,6 +164,12 @@ export function Home() {
       refRenderer.current = renderer;
     }
 
+    const queryParameters = new URLSearchParams(window.location.search);
+    const queryError = queryParameters.get('error');
+    if (queryError) {
+      setError(t(`common.errors.${queryError?.toUpperCase()}`));
+    }
+
     window.addEventListener('resize', onWindowResize, false);
     return () => {
       if (refTimer.current) {
@@ -181,9 +188,12 @@ export function Home() {
   return (
     <div ref={canvas} className={styles.home} onMouseMove={handleMousePosition}>
       <Card className={styles.home__card}>
-        <div className={styles.home__card__error}>{error}</div>
+        <div data-cy="error" className={styles.home__card__error}>
+          {error}
+        </div>
         <Input
           name="url"
+          dataCy="search"
           value={searchURL}
           onChange={onChange}
           disabled={!!longURL || loading}
@@ -204,6 +214,7 @@ export function Home() {
                 ? styles['home__card__action__shorten--loaded']
                 : ''
             }`}
+            dataCy="shorten"
             onClick={longURL ? copyURL : shortenURL}
             disabled={copied || loading || searchURL === ''}
             loading={loading}
@@ -254,6 +265,7 @@ export function Home() {
             className={`${styles.home__card__action__retry} ${
               longURL ? styles['home__card__action__retry--loaded'] : ''
             }`}
+            dataCy="retry"
             onClick={reset}
             loading={loading}
           >
