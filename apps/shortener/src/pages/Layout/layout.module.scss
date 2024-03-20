@@ -6,6 +6,25 @@
 
     &__wrapper {
         margin: auto 15%;
+        display: flex;
+        gap: 60px;
+        flex-direction: column;
+        justify-content: center;
+        height: 100vh;
+        padding-bottom: 5%;
+
+        &__header {
+            position: relative;
+            z-index: 100;
+        }
+
+        &__image {
+            width: 150px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%);
+        }
 
         &__h1 {
             font: bold 40px asap, arial;
@@ -13,7 +32,10 @@
             padding-top: 50px;
             padding-bottom: 50px;
             text-transform: uppercase;
-            color: $color-blue;
+            color: $color-white;
+            position: relative;
+            z-index: 100;
+            user-select: none;
         }
 
         @media screen and (max-width: 720px) {
