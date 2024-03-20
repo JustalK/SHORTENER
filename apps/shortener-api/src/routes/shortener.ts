@@ -68,8 +68,12 @@ class ShortenerRoutes extends Base {
       return this.#exceptionService.createException(ERROR.X0003.KEY);
     }
 
-    const result = await axios.get(longURL);
-    if (result.status !== STATUS.SUCCESS) {
+    try {
+      const result = await axios.get(longURL);
+      if (result.status !== STATUS.SUCCESS) {
+        return this.#exceptionService.createException(ERROR.X0009.KEY);
+      }
+    } catch (e: unknown) {
       return this.#exceptionService.createException(ERROR.X0009.KEY);
     }
   }

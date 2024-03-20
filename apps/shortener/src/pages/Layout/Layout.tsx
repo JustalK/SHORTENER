@@ -12,7 +12,15 @@ export function Layout() {
   return (
     <div className={styles.layout}>
       <div className={styles.layout__wrapper}>
-        <h1 className={styles.layout__wrapper__h1}>{t('layout.title')}</h1>
+        <div className={styles.layout__wrapper__header}>
+          <h1 className={styles.layout__wrapper__h1}>{t('layout.title')}</h1>
+          <img
+            className={styles.layout__wrapper__image}
+            src="./link.png"
+            alt="Logo"
+          />
+          ;
+        </div>
         <div>
           <Outlet />
         </div>

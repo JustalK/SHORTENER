@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styles from './button.module.scss';
 
 /**
@@ -9,24 +9,25 @@ import styles from './button.module.scss';
  * @returns JSX of the button
  */
 export function Button({
-  type,
-  label,
+  children,
   disabled,
+  className,
+  loading = false,
   onClick = undefined,
 }: {
-  type: 'button' | 'submit';
-  label: string;
+  children: React.ReactNode;
   disabled?: boolean;
+  loading?: boolean;
+  className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
 }) {
   return (
     <button
-      type={type}
-      className={styles.button}
+      className={`${styles.button} ${className}`}
       onClick={onClick}
       disabled={disabled}
     >
-      {label}
+      {children}
     </button>
   );
 }

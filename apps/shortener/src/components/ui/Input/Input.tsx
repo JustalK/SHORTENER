@@ -12,10 +12,12 @@ export function Input({
   name,
   value,
   onChange,
+  placeholder,
   disabled = false,
 }: {
   name: string;
   value: string | number | readonly string[] | undefined;
+  placeholder?: string;
   onChange?: undefined | React.ChangeEventHandler<HTMLInputElement>;
   disabled?: boolean;
 }) {
@@ -25,6 +27,7 @@ export function Input({
       name={name}
       value={value}
       onChange={onChange}
+      placeholder={placeholder}
       disabled={disabled}
     />
   );

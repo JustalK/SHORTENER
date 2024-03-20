@@ -7,10 +7,12 @@
         "subtitle": "URL shortener allows to create a shortened link making it easy to share",
         "footer": "Long URL",
         "counter": "Counter",
+        "input": "Paste your link here...",
         "button": {
-            "copy": "Copy URL",
+            "copy": "Copy to clipboard",
             "copied": "Copied",
-            "shorten": "Shorten URL"
+            "shorten": "Shorten URL",
+            "reset": "Retry"
         }
     },
     "common": {
