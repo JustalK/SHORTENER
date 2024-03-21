@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { useState, useCallback, useRef, useEffect, RefObject } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Card from '../../components/ui/Card/Card';
 import Input from '../../components/ui/Input/Input';
