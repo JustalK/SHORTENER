@@ -26,7 +26,8 @@
             "X0007": "No short url found",
             "X0008": "Link expired",
             "X0009": "This is not a valid link",
-            "X0010": "No link found"
+            "X0010": "No link found",
+            "X0011": "The link is not reachable"
         }
     }
 }

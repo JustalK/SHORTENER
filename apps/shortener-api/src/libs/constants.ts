@@ -54,4 +54,8 @@ export const ERROR = {
     KEY: 'X0010',
     MESSAGE: 'No Link Found',
   },
+  X0011: {
+    KEY: 'X0011',
+    MESSAGE: 'The url is not reachable',
+  },
 };

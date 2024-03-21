@@ -107,28 +107,31 @@ export function Home() {
     }, 1000);
   }, [shortURL]);
 
-  /**
-   * Handle the when the user start typing in the input
-   */
-  const onChange = useCallback((event: React.FormEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLTextAreaElement;
-    setSearchURL(target.value);
-    setShortURL('');
-    setLongURL('');
-    setError(null);
-    onChangeCheck();
-  }, []);
-
   const onChangeCheck = useCallback(() => {
     if (refTimerCheck.current) {
       clearTimeout(refTimerCheck.current);
     }
     refTimerCheck.current = setTimeout(() => {
-      if (!isValidUrl(searchURL)) {
+      if (!isValidUrl(searchURL) && searchURL !== '') {
         setError(t('common.errors.X0003'));
       }
     }, 500);
   }, [searchURL, t]);
+
+  /**
+   * Handle the when the user start typing in the input
+   */
+  const onChange = useCallback(
+    (event: React.FormEvent<HTMLInputElement>) => {
+      const target = event.target as HTMLTextAreaElement;
+      setSearchURL(target.value);
+      setShortURL('');
+      setLongURL('');
+      setError(null);
+      onChangeCheck();
+    },
+    [onChangeCheck]
+  );
 
   /**
    * Reset the parameter of the app
@@ -205,7 +208,7 @@ export function Home() {
       }
       window.removeEventListener('resize', onWindowResize, false);
     };
-  }, []);
+  }, [t]);
 
   return (
     <div ref={canvas} className={styles.home} onMouseMove={handleMousePosition}>
