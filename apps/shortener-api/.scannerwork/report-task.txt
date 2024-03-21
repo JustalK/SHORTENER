@@ -1,0 +1,6 @@
+projectKey=shortener-api
+serverUrl=http://sonar.net
+serverVersion=10.4.1.88267
+dashboardUrl=http://sonar.net/dashboard?id=shortener-api
+ceTaskId=1cbba262-5a3d-475d-9446-8595483d0a3d
+ceTaskUrl=http://sonar.net/api/ce/task?id=1cbba262-5a3d-475d-9446-8595483d0a3d

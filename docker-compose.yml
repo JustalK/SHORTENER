@@ -44,5 +44,15 @@ services:
       - mongodb
     networks:
       kevin-network:
+  sonarqube:
+    container_name: labo-sonarqube
+    image: sonarqube:latest
+    environment:
+      - VIRTUAL_HOST=sonar.net
+      - VIRTUAL_PORT=9000
+    ports:
+      - '9080:9000'
+    networks:
+      kevin-network:
 networks:
   kevin-network:

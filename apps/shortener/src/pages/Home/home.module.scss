@@ -33,9 +33,8 @@
             }
 
             &__shorten {
-                position: absolute;
-                gap: 4px;
                 position: relative;
+                gap: 4px;
                 top: 0;
                 left: 50%;
                 transform: translateX(-50%);
@@ -81,7 +80,7 @@
                 align-items: center;
                 gap: 4px;
                 height: 60px;
-                font: 16px lato, arial;
+                font: 16px lato, arial, sans-serif;
                 color: $color-white;
                 background-color: $color-dark-blue;
                 text-align: center;
