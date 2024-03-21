@@ -29,6 +29,7 @@ export function Button({
       onClick={onClick}
       data-cy={dataCy}
       disabled={disabled}
+      aria-pressed={loading}
     >
       {children}
     </button>

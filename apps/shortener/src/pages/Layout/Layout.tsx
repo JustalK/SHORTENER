@@ -17,9 +17,8 @@ export function Layout() {
           <img
             className={styles.layout__wrapper__image}
             src="./link.png"
-            alt="Logo"
+            alt="Logo Short URL"
           />
-          ;
         </div>
         <div>
           <Outlet />

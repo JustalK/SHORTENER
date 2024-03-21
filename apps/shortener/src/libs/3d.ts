@@ -1,14 +1,31 @@
+import { MutableRefObject } from 'react';
 import * as THREE from 'three';
 import FogMaterial from '../materials/FogMaterial';
+import { PerspectiveCamera } from 'three';
 
-const getWidthAndHeight = (camera, distance) => {
+/**
+ * Calculate the size of the object depending of the fov and distance
+ * @param camera The camera to calculate the size from
+ * @param distance The distance of the object from the camera
+ * @returns {number[]} The width and height of the object
+ */
+export const getWidthAndHeight = (camera: PerspectiveCamera, distance: number) => {
   const viewFOV = (camera.fov * Math.PI) / 180;
   const height = 2 * Math.tan(viewFOV / 2) * distance;
   const width = height * camera.aspect;
   return [width, height];
 };
 
-export const init3D = (canvas: any) => {
+/**
+ * Init the 3D background
+ * @param canvas The element to add the canvas too
+ * @returns {Object} return the camera and material to change it in Home
+ */
+export const init3D = (canvas: MutableRefObject<HTMLInputElement | null>) => {
+  if (!canvas || !canvas.current) {
+    return;
+  }
+
   const scene = new THREE.Scene();
   const clock = new THREE.Clock();
   const camera = new THREE.PerspectiveCamera(

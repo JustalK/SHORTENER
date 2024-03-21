@@ -1,12 +1,13 @@
 import * as THREE from 'three';
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, RefObject } from 'react';
 import { useTranslation } from 'react-i18next';
 import Card from '../../components/ui/Card/Card';
 import Input from '../../components/ui/Input/Input';
 import Button from '../../components/ui/Button/Button';
 import { postShortenURL, getURL } from '../../services/shortener';
 import styles from './home.module.scss';
-import { init3D } from '../../libs/3d';
+import { init3D, getWidthAndHeight } from '../../libs/3d';
+import { isValidUrl } from '../../libs/utils';
 import { ShaderMaterial, PerspectiveCamera, WebGLRenderer } from 'three';
 import { TailSpin } from 'react-loader-spinner';
 import ShortTextIcon from '@mui/icons-material/ShortText';
@@ -28,8 +29,9 @@ export function Home() {
   const [searchURL, setSearchURL] = useState('');
   const [countUsage, setCountUsage] = useState('');
   const [copied, setCopied] = useState(false);
-  const canvas = useRef(null);
+  const canvas = useRef<HTMLInputElement | null>(null);
   const refTimer = useRef<null | ReturnType<typeof setTimeout>>(null);
+  const refTimerCheck = useRef<null | ReturnType<typeof setTimeout>>(null);
   const refTimerCopy = useRef<null | ReturnType<typeof setTimeout>>(null);
   const refTimerResize = useRef<null | ReturnType<typeof setTimeout>>(null);
   const refMaterial = useRef<ShaderMaterial | null>(null);
@@ -47,6 +49,12 @@ export function Home() {
       if (refTimer.current) {
         clearTimeout(refTimer.current);
       }
+      // Check before sending to the backend in case
+      if (!isValidUrl(searchURL)) {
+        setError(t('common.errors.X0003'));
+        setLoading(false);
+        return false;
+      }
       window.history.replaceState(null, '', window.location.pathname);
       const response = await postShortenURL(searchURL);
       if (response && response.error) {
@@ -62,7 +70,7 @@ export function Home() {
         setLoading(false);
       }, 500);
     },
-    [refTimer, searchURL]
+    [refTimer, searchURL, t]
   );
 
   /**
@@ -108,7 +116,19 @@ export function Home() {
     setShortURL('');
     setLongURL('');
     setError(null);
+    onChangeCheck();
   }, []);
+
+  const onChangeCheck = useCallback(() => {
+    if (refTimerCheck.current) {
+      clearTimeout(refTimerCheck.current);
+    }
+    refTimerCheck.current = setTimeout(() => {
+      if (!isValidUrl(searchURL)) {
+        setError(t('common.errors.X0003'));
+      }
+    }, 500);
+  }, [searchURL, t]);
 
   /**
    * Reset the parameter of the app
@@ -128,14 +148,13 @@ export function Home() {
     }
     refTimerResize.current = setTimeout(() => {
       if (refCamera?.current && refRenderer?.current && refMaterial?.current) {
+        const [width, height] = getWidthAndHeight(refCamera.current, 100);
         refMaterial.current.uniforms.uResolution.value = new THREE.Vector2(
-          window.innerHeight / window.innerWidth,
-          window.innerHeight / window.innerWidth
+          1.0,
+          height / width
         );
-        refCamera.current.aspect = window.innerWidth / window.innerHeight;
-        refCamera.current.updateProjectionMatrix();
 
-        refRenderer.current.setSize(window.innerWidth, window.innerHeight);
+        refRenderer.current.setSize(width, height);
       }
     }, 500);
   };
@@ -158,10 +177,13 @@ export function Home() {
   useEffect(() => {
     if (canvas.current && !initialized.current) {
       initialized.current = true;
-      const { backgroundMaterial, renderer, camera } = init3D(canvas);
-      refMaterial.current = backgroundMaterial;
-      refCamera.current = camera;
-      refRenderer.current = renderer;
+      const scene = init3D(canvas);
+      if (scene) {
+        const { backgroundMaterial, renderer, camera } = scene;
+        refMaterial.current = backgroundMaterial;
+        refCamera.current = camera;
+        refRenderer.current = renderer;
+      }
     }
 
     const queryParameters = new URLSearchParams(window.location.search);
@@ -216,7 +238,9 @@ export function Home() {
             }`}
             dataCy="shorten"
             onClick={longURL ? copyURL : shortenURL}
-            disabled={copied || loading || searchURL === ''}
+            disabled={
+              copied || loading || searchURL === '' || !isValidUrl(searchURL)
+            }
             loading={loading}
           >
             <div
