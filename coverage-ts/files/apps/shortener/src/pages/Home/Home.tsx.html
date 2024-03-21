@@ -1,0 +1,326 @@
+
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>Home.tsx</title>
+      <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" type="text/css" rel="stylesheet">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css" type="text/css" rel="stylesheet">
+<script src="../../../../../../assets/source-file.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../../../../../assets/source-file.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+    <div style="margin-top:3em" class="ui container"><h1 class="ui header"><a href="../../../../../../index.html">TypeScript coverage report</a></h1><table style="margin-top:2em" class="ui celled table"><thead class=""><tr class=""><th class="">Filename</th><th class="">Percent</th><th class="">Threshold</th><th class="">Total</th><th class="">Covered</th><th class="">Uncovered</th></tr></thead><tbody class=""><tr class="positive"><td class="">apps/shortener/src/pages/Home/Home.tsx</td><td class="">95.55%</td><td class="">80%</td><td class="">449</td><td class="">429</td><td class="">20</td></tr></tbody></table><textarea id="editor" readonly="" style="margin-top:3em">import * as THREE from &#x27;three&#x27;;
+import { useState, useCallback, useRef, useEffect } from &#x27;react&#x27;;
+import { useTranslation } from &#x27;react-i18next&#x27;;
+import Card from &#x27;../../components/ui/Card/Card&#x27;;
+import Input from &#x27;../../components/ui/Input/Input&#x27;;
+import Button from &#x27;../../components/ui/Button/Button&#x27;;
+import { postShortenURL, getURL } from &#x27;../../services/shortener&#x27;;
+import styles from &#x27;./home.module.scss&#x27;;
+import { init3D, getWidthAndHeight } from &#x27;../../libs/3d&#x27;;
+import { isValidUrl } from &#x27;../../libs/utils&#x27;;
+import { ShaderMaterial, PerspectiveCamera, WebGLRenderer } from &#x27;three&#x27;;
+import { TailSpin } from &#x27;react-loader-spinner&#x27;;
+import ShortTextIcon from &#x27;@mui/icons-material/ShortText&#x27;;
+import NumbersIcon from &#x27;@mui/icons-material/Numbers&#x27;;
+import ReplayIcon from &#x27;@mui/icons-material/Replay&#x27;;
+import ContentPasteIcon from &#x27;@mui/icons-material/ContentPaste&#x27;;
+
+/**
+ * Home page of the applicaton
+ * @returns {ReactElement} The homepage of the application
+ */
+export function Home() {
+  const initialized = useRef(false);
+  const { t } = useTranslation();
+  const [shortURL, setShortURL] = useState(&#x27;&#x27;);
+  const [error, setError] = useState&lt;null | string&gt;(null);
+  const [longURL, setLongURL] = useState(&#x27;&#x27;);
+  const [loading, setLoading] = useState(false);
+  const [searchURL, setSearchURL] = useState(&#x27;&#x27;);
+  const [countUsage, setCountUsage] = useState(&#x27;&#x27;);
+  const [copied, setCopied] = useState(false);
+  const canvas = useRef&lt;HTMLInputElement | null&gt;(null);
+  const refTimer = useRef&lt;null | ReturnType&lt;typeof setTimeout&gt;&gt;(null);
+  const refTimerCheck = useRef&lt;null | ReturnType&lt;typeof setTimeout&gt;&gt;(null);
+  const refTimerCopy = useRef&lt;null | ReturnType&lt;typeof setTimeout&gt;&gt;(null);
+  const refTimerResize = useRef&lt;null | ReturnType&lt;typeof setTimeout&gt;&gt;(null);
+  const refMaterial = useRef&lt;ShaderMaterial | null&gt;(null);
+  const refCamera = useRef&lt;PerspectiveCamera | null&gt;(null);
+  const refRenderer = useRef&lt;WebGLRenderer | null&gt;(null);
+
+  /**
+   * get the information of the input and shorten the url through the api
+   * @param {React.SyntheticEvent} e The event received from the form
+   */
+  const shortenURL = useCallback(
+    async (e: React.SyntheticEvent) =&gt; {
+      e.preventDefault();
+      setLoading(true);
+      if (refTimer.current) {
+        clearTimeout(refTimer.current);
+      }
+      // Check before sending to the backend in case
+      if (!isValidUrl(searchURL)) {
+        setError(t(&#x27;common.errors.X0003&#x27;));
+        setLoading(false);
+        return false;
+      }
+      window.history.replaceState(null, &#x27;&#x27;, window.location.pathname);
+      const response = await postShortenURL(searchURL);
+      if (response &amp;&amp; response.error) {
+        setError(response.error.message);
+      } else {
+        const host = getURL();
+        setShortURL(`${host}${response.shortURL}`);
+        setLongURL(response.longURL);
+        setSearchURL(`${host}${response.shortURL}`);
+        setCountUsage(response.countUsage);
+      }
+      refTimer.current = setTimeout(() =&gt; {
+        setLoading(false);
+      }, 500);
+    },
+    [refTimer, searchURL, t]
+  );
+
+  /**
+   * Button to copy the result in the clipboad
+   */
+  const copyURL = useCallback(async () =&gt; {
+    try {
+      await navigator.clipboard.writeText(shortURL);
+      setCopied(true);
+    } catch (error) {
+      // Use the &#x27;out of viewport hidden text area&#x27; trick
+      const textArea = document.createElement(&#x27;textarea&#x27;);
+      textArea.value = shortURL;
+
+      // Move textarea out of the viewport so it&#x27;s not visible
+      textArea.style.position = &#x27;absolute&#x27;;
+      textArea.style.left = &#x27;-999999px&#x27;;
+
+      document.body.prepend(textArea);
+      textArea.select();
+
+      try {
+        document.execCommand(&#x27;copy&#x27;);
+        setCopied(true);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        textArea.remove();
+      }
+    }
+
+    refTimerCopy.current = setTimeout(() =&gt; {
+      setCopied(false);
+    }, 1000);
+  }, [shortURL]);
+
+  const onChangeCheck = useCallback(() =&gt; {
+    if (refTimerCheck.current) {
+      clearTimeout(refTimerCheck.current);
+    }
+    refTimerCheck.current = setTimeout(() =&gt; {
+      if (!isValidUrl(searchURL) &amp;&amp; searchURL !== &#x27;&#x27;) {
+        setError(t(&#x27;common.errors.X0003&#x27;));
+      }
+    }, 500);
+  }, [searchURL, t]);
+
+  /**
+   * Handle the when the user start typing in the input
+   */
+  const onChange = useCallback(
+    (event: React.FormEvent&lt;HTMLInputElement&gt;) =&gt; {
+      const target = event.target as HTMLTextAreaElement;
+      setSearchURL(target.value);
+      setShortURL(&#x27;&#x27;);
+      setLongURL(&#x27;&#x27;);
+      setError(null);
+      onChangeCheck();
+    },
+    [onChangeCheck]
+  );
+
+  /**
+   * Reset the parameter of the app
+   */
+  const reset = (e: React.SyntheticEvent) =&gt; {
+    setSearchURL(&#x27;&#x27;);
+    setShortURL(&#x27;&#x27;);
+    setLongURL(&#x27;&#x27;);
+  };
+
+  /**
+   * Resize the three JS background
+   */
+  const onWindowResize = () =&gt; {
+    if (refTimerResize.current) {
+      clearTimeout(refTimerResize.current);
+    }
+    refTimerResize.current = setTimeout(() =&gt; {
+      if (refCamera?.current &amp;&amp; refRenderer?.current &amp;&amp; refMaterial?.current) {
+        const [width, height] = getWidthAndHeight(refCamera.current, 100);
+        refMaterial.current.uniforms.uResolution.value = new THREE.Vector2(
+          1.0,
+          height / width
+        );
+
+        refRenderer.current.setSize(width, height);
+      }
+    }, 500);
+  };
+
+  /**
+   * Handle the mouse position for the mouse effect on the background
+   */
+  const handleMousePosition = (event: React.MouseEvent) =&gt; {
+    if (refMaterial.current) {
+      refMaterial.current.uniforms.uMouse.value.x =
+        event.clientX / window.innerWidth;
+      refMaterial.current.uniforms.uMouse.value.y =
+        1.0 - event.clientY / window.innerHeight;
+    }
+  };
+
+  /**
+   * Just to clean the timeout event
+   */
+  useEffect(() =&gt; {
+    if (canvas.current &amp;&amp; !initialized.current) {
+      initialized.current = true;
+      const scene = init3D(canvas);
+      if (scene) {
+        const { backgroundMaterial, renderer, camera } = scene;
+        refMaterial.current = backgroundMaterial;
+        refCamera.current = camera;
+        refRenderer.current = renderer;
+      }
+    }
+
+    const queryParameters = new URLSearchParams(window.location.search);
+    const queryError = queryParameters.get(&#x27;error&#x27;);
+    if (queryError) {
+      setError(t(`common.errors.${queryError?.toUpperCase()}`));
+    }
+
+    window.addEventListener(&#x27;resize&#x27;, onWindowResize, false);
+    return () =&gt; {
+      if (refTimer.current) {
+        clearTimeout(refTimer.current);
+      }
+      if (refTimerCopy.current) {
+        clearTimeout(refTimerCopy.current);
+      }
+      if (refTimerResize.current) {
+        clearTimeout(refTimerResize.current);
+      }
+      window.removeEventListener(&#x27;resize&#x27;, onWindowResize, false);
+    };
+  }, [t]);
+
+  return (
+    &lt;div ref={canvas} className={styles.home} onMouseMove={handleMousePosition}&gt;
+      &lt;Card className={styles.home__card}&gt;
+        &lt;div data-cy=&quot;error&quot; className={styles.home__card__error}&gt;
+          {error}
+        &lt;/div&gt;
+        &lt;Input
+          name=&quot;url&quot;
+          dataCy=&quot;search&quot;
+          value={searchURL}
+          onChange={onChange}
+          disabled={!!longURL || loading}
+          placeholder={t(&#x27;home.input&#x27;)}
+        /&gt;
+        &lt;div className={styles.home__card__action}&gt;
+          &lt;div
+            className={`${styles.home__card__action__count} ${
+              longURL ? styles[&#x27;home__card__action__count--loaded&#x27;] : &#x27;&#x27;
+            }`}
+          &gt;
+            &lt;NumbersIcon /&gt;
+            {`${t(&#x27;home.counter&#x27;)}: ${countUsage} `}
+          &lt;/div&gt;
+          &lt;Button
+            className={`${styles.home__card__action__shorten} ${
+              loading || longURL
+                ? styles[&#x27;home__card__action__shorten--loaded&#x27;]
+                : &#x27;&#x27;
+            }`}
+            dataCy=&quot;shorten&quot;
+            onClick={longURL ? copyURL : shortenURL}
+            disabled={
+              copied || loading || searchURL === &#x27;&#x27; || !isValidUrl(searchURL)
+            }
+            loading={loading}
+          &gt;
+            &lt;div
+              className={`${styles.home__card__action__shorten__loader} ${
+                loading
+                  ? styles[&#x27;home__card__action__shorten__loader--loaded&#x27;]
+                  : &#x27;&#x27;
+              }`}
+            &gt;
+              &lt;TailSpin
+                visible={true}
+                height=&quot;20&quot;
+                width=&quot;100&quot;
+                color=&quot;#fff&quot;
+                ariaLabel=&quot;tail-spin-loading&quot;
+                radius=&quot;2&quot;
+                wrapperStyle={{}}
+                wrapperClass=&quot;&quot;
+              /&gt;
+            &lt;/div&gt;
+            &lt;span
+              className={`${styles.home__card__action__shorten__text} ${
+                !loading
+                  ? styles[&#x27;home__card__action__shorten__text--loaded&#x27;]
+                  : &#x27;&#x27;
+              }`}
+            &gt;
+              {longURL ? (
+                copied ? (
+                  &lt;&gt;{t(&#x27;home.button.copied&#x27;)}&lt;/&gt;
+                ) : (
+                  &lt;&gt;
+                    &lt;ContentPasteIcon /&gt;
+                    {t(&#x27;home.button.copy&#x27;)}
+                  &lt;/&gt;
+                )
+              ) : (
+                &lt;&gt;
+                  &lt;ShortTextIcon /&gt;
+                  {t(&#x27;home.button.shorten&#x27;)}
+                &lt;/&gt;
+              )}
+            &lt;/span&gt;
+          &lt;/Button&gt;
+          &lt;Button
+            className={`${styles.home__card__action__retry} ${
+              longURL ? styles[&#x27;home__card__action__retry--loaded&#x27;] : &#x27;&#x27;
+            }`}
+            dataCy=&quot;retry&quot;
+            onClick={reset}
+            loading={loading}
+          &gt;
+            &lt;ReplayIcon /&gt;
+            {t(&#x27;home.button.reset&#x27;)}
+          &lt;/Button&gt;
+        &lt;/div&gt;
+      &lt;/Card&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default Home;
+</textarea><pre id="annotations" style="display:none">[{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:58,&quot;character&quot;:12,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:59,&quot;character&quot;:10,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:59,&quot;character&quot;:22,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:59,&quot;character&quot;:31,&quot;text&quot;:&quot;error&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:60,&quot;character&quot;:17,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:60,&quot;character&quot;:26,&quot;text&quot;:&quot;error&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:60,&quot;character&quot;:32,&quot;text&quot;:&quot;message&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:63,&quot;character&quot;:30,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:63,&quot;character&quot;:39,&quot;text&quot;:&quot;shortURL&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:64,&quot;character&quot;:19,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:64,&quot;character&quot;:28,&quot;text&quot;:&quot;longURL&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:65,&quot;character&quot;:31,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:65,&quot;character&quot;:40,&quot;text&quot;:&quot;shortURL&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:66,&quot;character&quot;:22,&quot;text&quot;:&quot;response&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:66,&quot;character&quot;:31,&quot;text&quot;:&quot;countUsage&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:154,&quot;character&quot;:49,&quot;text&quot;:&quot;value&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:169,&quot;character&quot;:42,&quot;text&quot;:&quot;value&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:169,&quot;character&quot;:48,&quot;text&quot;:&quot;x&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:171,&quot;character&quot;:42,&quot;text&quot;:&quot;value&quot;,&quot;kind&quot;:1},{&quot;file&quot;:&quot;apps/shortener/src/pages/Home/Home.tsx&quot;,&quot;line&quot;:171,&quot;character&quot;:48,&quot;text&quot;:&quot;y&quot;,&quot;kind&quot;:1}]</pre></div>
+    <p class="footer-text">TypeScript Coverage Report generated by <a href="https://github.com/plantain-00/type-coverage">type-coverage</a> and <a href="https://github.com/alexcanessa/typescript-coverage-report">typescript-coverage-report</a> at Thu, 21 Mar 2024 13:08:57 GMT</p>
+    </body>
+  </html>
+  

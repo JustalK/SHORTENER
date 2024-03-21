@@ -1,0 +1,267 @@
+{
+  "fileCounts": {
+    "apps/shortener/src/components/ui/Card/Card.tsx": {
+      "correctCount": 16,
+      "totalCount": 16
+    },
+    "apps/shortener/src/components/ui/Input/Input.tsx": {
+      "correctCount": 34,
+      "totalCount": 34
+    },
+    "apps/shortener/src/components/ui/Button/Button.tsx": {
+      "correctCount": 37,
+      "totalCount": 37
+    },
+    "apps/shortener/src/interfaces/options.ts": {
+      "correctCount": 5,
+      "totalCount": 5
+    },
+    "apps/shortener/src/interfaces/shortener.ts": {
+      "correctCount": 2,
+      "totalCount": 2
+    },
+    "apps/shortener/src/services/api/api.ts": {
+      "correctCount": 59,
+      "totalCount": 59
+    },
+    "apps/shortener/src/services/shortener.ts": {
+      "correctCount": 26,
+      "totalCount": 26
+    },
+    "apps/shortener/src/materials/FogMaterial.ts": {
+      "correctCount": 4,
+      "totalCount": 4
+    },
+    "apps/shortener/src/libs/3d.ts": {
+      "correctCount": 122,
+      "totalCount": 123
+    },
+    "apps/shortener/src/libs/utils.ts": {
+      "correctCount": 6,
+      "totalCount": 6
+    },
+    "apps/shortener/src/pages/Home/Home.tsx": {
+      "correctCount": 429,
+      "totalCount": 449
+    },
+    "apps/shortener/src/pages/Layout/Layout.tsx": {
+      "correctCount": 37,
+      "totalCount": 37
+    },
+    "apps/shortener/src/app/app.tsx": {
+      "correctCount": 20,
+      "totalCount": 20
+    },
+    "apps/shortener/src/main.tsx": {
+      "correctCount": 30,
+      "totalCount": 30
+    },
+    "apps/shortener/src/interfaces/error.ts": {
+      "correctCount": 2,
+      "totalCount": 2
+    },
+    "apps/shortener/src/interfaces/jsx.ts": {
+      "correctCount": 9,
+      "totalCount": 9
+    },
+    "apps/shortener/src/components/Background/index.tsx": {
+      "correctCount": 53,
+      "totalCount": 59
+    }
+  },
+  "anys": [
+    {
+      "file": "apps/shortener/src/libs/3d.ts",
+      "line": 63,
+      "character": 40,
+      "text": "value",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 58,
+      "character": 12,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 59,
+      "character": 10,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 59,
+      "character": 22,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 59,
+      "character": 31,
+      "text": "error",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 60,
+      "character": 17,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 60,
+      "character": 26,
+      "text": "error",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 60,
+      "character": 32,
+      "text": "message",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 63,
+      "character": 30,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 63,
+      "character": 39,
+      "text": "shortURL",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 64,
+      "character": 19,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 64,
+      "character": 28,
+      "text": "longURL",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 65,
+      "character": 31,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 65,
+      "character": 40,
+      "text": "shortURL",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 66,
+      "character": 22,
+      "text": "response",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 66,
+      "character": 31,
+      "text": "countUsage",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 154,
+      "character": 49,
+      "text": "value",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 169,
+      "character": 42,
+      "text": "value",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 169,
+      "character": 48,
+      "text": "x",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 171,
+      "character": 42,
+      "text": "value",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/pages/Home/Home.tsx",
+      "line": 171,
+      "character": 48,
+      "text": "y",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/components/Background/index.tsx",
+      "line": 6,
+      "character": 2,
+      "text": "mouse",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/components/Background/index.tsx",
+      "line": 10,
+      "character": 2,
+      "text": "mouse",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/components/Background/index.tsx",
+      "line": 23,
+      "character": 8,
+      "text": "mouse",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/components/Background/index.tsx",
+      "line": 23,
+      "character": 14,
+      "text": "current",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/components/Background/index.tsx",
+      "line": 24,
+      "character": 27,
+      "text": "mouse",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener/src/components/Background/index.tsx",
+      "line": 24,
+      "character": 33,
+      "text": "current",
+      "kind": 1
+    }
+  ],
+  "percentage": 97.05882352941177,
+  "total": 918,
+  "covered": 891,
+  "uncovered": 27
+}
