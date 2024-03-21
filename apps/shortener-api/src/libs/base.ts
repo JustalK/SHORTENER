@@ -5,13 +5,14 @@
 'use strict';
 
 import logger from '@libs/logger';
+import winston from 'winston';
 
 /**
  * Class for connecting to the mongoDB instance
  */
 class Base {
   // The winston logger
-  logger;
+  logger: winston.Logger;
 
   /**
    * Constructor for the database

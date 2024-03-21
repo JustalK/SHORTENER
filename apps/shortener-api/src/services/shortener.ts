@@ -9,15 +9,20 @@ import ENVIRONMENT from '@src/environment';
 import {
   type ShortenerType,
   ShortenerServiceType,
+  ShortenerDbType,
 } from '@interfaces/shortener';
 
 /**
  * Class for handling anything related to the shortener
  */
 class ShortenerService implements ShortenerServiceType {
-  #shortenerDb;
-  #shortenerModel;
-  constructor(shortenerDb, shortenerModel) {
+  #shortenerDb: ShortenerDbType;
+  #shortenerModel: typeof ShortenerModel;
+
+  constructor(
+    shortenerDb: ShortenerDbType,
+    shortenerModel: typeof ShortenerModel
+  ) {
     this.#shortenerDb = shortenerDb;
     this.#shortenerModel = shortenerModel;
   }

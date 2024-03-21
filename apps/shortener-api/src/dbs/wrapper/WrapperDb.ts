@@ -3,6 +3,7 @@
  * Since all the call are regrouped here, it will be easy to change database or ORM
  * @module WrapperDb
  */
+import { Document } from 'mongoose';
 
 class WrapperDb {
   #model;
@@ -10,31 +11,31 @@ class WrapperDb {
     this.#model = model;
   }
 
-  async create(data) {
+  async create<T>(data: Document): Promise<T> {
     return this.#model.create(data);
   }
 
-  async findOne(query) {
+  async findOne<T, Q>(query: Q): Promise<T> {
     return this.#model.findOne(query);
   }
 
-  async update(query, data) {
+  async update<T, Q>(query: Q, data): Promise<T> {
     return this.#model.findOneAndUpdate(query, { $set: data });
   }
 
-  async facet(query) {
+  async facet<T, Q>(query: Q): Promise<T> {
     return this.#model.aggregate().facet(query);
   }
 
-  queryMatch(query) {
+  queryMatch<Q>(query: Q): { $match: Q } {
     return { $match: query };
   }
 
-  queryLimit(limit) {
+  queryLimit<Q>(limit: Q): { $limit: Q } {
     return { $limit: limit };
   }
 
-  async increment(query, field) {
+  async increment<T, Q>(query: Q, field: string): Promise<T> {
     return this.#model.findOneAndUpdate(query, {
       $inc: { [field]: 1 },
     });

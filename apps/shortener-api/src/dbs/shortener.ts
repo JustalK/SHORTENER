@@ -4,6 +4,8 @@
  */
 
 import WrapperDb from '@dbs/wrapper/WrapperDb';
+import { ShortenerType } from '@interfaces/shortener';
+import ShortenerModel from '@models/shortener';
 
 /**
  * Class for managing the interaction to the shortener collection
@@ -13,7 +15,7 @@ class ShortenerDb extends WrapperDb {
    * Constructor of the ShortenerDB
    * @param model {Object} The shortener mongoose model
    */
-  constructor(model) {
+  constructor(model: typeof ShortenerModel) {
     super(model);
   }
 
@@ -22,8 +24,8 @@ class ShortenerDb extends WrapperDb {
    * @param tmpShortened The shortener object to save to the db
    * @returns {Object} The saved shortener object
    */
-  async save(tmpShortened) {
-    return this.create(tmpShortened);
+  async save(tmpShortened: ShortenerType): Promise<ShortenerType> {
+    return this.create<ShortenerType>(tmpShortened);
   }
 
   /**
@@ -31,8 +33,8 @@ class ShortenerDb extends WrapperDb {
    * @param shortURL The short url of the shortener to find
    * @returns {Object} The found shortener object
    */
-  async getByShortUrl({ shortURL }) {
-    return this.findOne({ shortURL });
+  async getByShortUrl({ shortURL }: ShortenerType): Promise<ShortenerType> {
+    return this.findOne<ShortenerType, { shortURL: string }>({ shortURL });
   }
 
   /**
@@ -40,8 +42,8 @@ class ShortenerDb extends WrapperDb {
    * @param longURL The long url of the shortener to find
    * @returns {Object} The found shortener object
    */
-  async getByLongUrl({ longURL }) {
-    return this.findOne({ longURL });
+  async getByLongUrl({ longURL }: ShortenerType): Promise<ShortenerType> {
+    return this.findOne<ShortenerType, { longURL: string }>({ longURL });
   }
 
   /**
@@ -49,8 +51,14 @@ class ShortenerDb extends WrapperDb {
    * @param shortURL The short url of the shortener to find
    * @returns {Object} The updated shortener object
    */
-  async incrementByShortUrl({ shortURL }, field: string) {
-    return this.increment({ shortURL }, field);
+  async incrementByShortUrl(
+    { shortURL }: ShortenerType,
+    field: string
+  ): Promise<ShortenerType> {
+    return this.increment<ShortenerType, { shortURL: string }>(
+      { shortURL },
+      field
+    );
   }
 
   /**
@@ -59,8 +67,11 @@ class ShortenerDb extends WrapperDb {
    * @param longURL The long url of the shortener to update with
    * @returns {Object} The updated shortener object
    */
-  async updateByShortUrl({ shortURL, longURL }) {
-    return this.update(
+  async updateByShortUrl({
+    shortURL,
+    longURL,
+  }: ShortenerType): Promise<ShortenerType> {
+    return this.update<ShortenerType, { shortURL: string }>(
       { shortURL },
       { longURL, isArchive: false, countUsage: 0 }
     );
@@ -72,12 +83,27 @@ class ShortenerDb extends WrapperDb {
    * @param longURL The long url of the shortener to find
    * @returns {Object} The result of both queries
    */
-  async isExist({ longURL, shortURL }) {
-    const query1 = this.queryMatch({ longURL });
-    const query2 = this.queryMatch({ shortURL });
-    const limit = this.queryLimit(1);
+  async isExist({
+    longURL,
+    shortURL,
+  }: {
+    longURL: string;
+    shortURL: string;
+  }): Promise<{
+    longURL: ShortenerType[];
+    shortURL: ShortenerType[];
+  }> {
+    const query1 = this.queryMatch<{ longURL: string }>({ longURL });
+    const query2 = this.queryMatch<{ shortURL: string }>({ shortURL });
+    const limit = this.queryLimit<number>(1);
 
-    const result = await this.facet({
+    const result = await this.facet<
+      { longURL: string; shortURL: string },
+      {
+        longURL: ({ $match: { longURL: string } } | { $limit: number })[];
+        shortURL: ({ $match: { shortURL: string } } | { $limit: number })[];
+      }
+    >({
       longURL: [query1, limit],
       shortURL: [query2, limit],
     });
