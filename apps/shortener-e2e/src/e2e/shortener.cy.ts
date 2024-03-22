@@ -2,7 +2,7 @@
  * Test Shortener rapidly
  */
 
-const testUrl='https://www.google.com/'
+const testUrl = 'https://www.google.com/';
 
 describe('Test Shortener homepage', () => {
   beforeEach(() => cy.visit('/'));
@@ -12,28 +12,33 @@ describe('Test Shortener homepage', () => {
   });
 
   it('Shorten a link', () => {
-    cy.typeSearch(testUrl)
+    cy.typeSearch(testUrl);
     // Get the new value of the input
-    cy.get('[data-cy="search"]').should('be.visible').and((input) => {
-      const val = input.val()
-      expect(val).to.match(/localhost/)
-      expect(val !== testUrl)
-    // Check if the value redirect to google 
-    }).then(input => {
-      const val = input.val()
-      cy.visit(val as string)
-      cy.url().should('eq', testUrl)
-    });
-  })
+    cy.get('[data-cy="search"]')
+      .should('be.visible')
+      .and((input) => {
+        const val = input.val();
+        expect(val).to.match(/localhost/);
+        expect(val !== testUrl);
+        // Check if the value redirect to google
+      })
+      .then((input) => {
+        const val = input.val();
+        cy.visit(val as string);
+        cy.url().should('eq', testUrl);
+      });
+  });
 
   it('Shorten a fake link', () => {
-    cy.typeSearch('azdazdad')
-    cy.get('[data-cy="error"]').should('have.text',"This is not a valid URL")
-  })
+    cy.intercept('POST', Cypress.env('API_SHORTENER')).as('shorten');
+    cy.get('[data-cy="search"]').type('vfevdvd');
+    cy.get('[data-cy="shorten"]').should('be.disabled');
+    cy.get('[data-cy="error"]').should('have.text', 'This is not a valid URL');
+  });
 
   it('Retry a link', () => {
-    cy.typeSearch(testUrl)
-    cy.get('[data-cy="retry"]').click()
-    cy.get('[data-cy="search"]').should('have.value', '')
-  })
+    cy.typeSearch(testUrl);
+    cy.get('[data-cy="retry"]').click();
+    cy.get('[data-cy="search"]').should('have.value', '');
+  });
 });
