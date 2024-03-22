@@ -35,8 +35,9 @@ class ShortenerService implements ShortenerServiceType {
   isExpired(shortener: ShortenerType): boolean {
     const toDay = new Date();
     return (
-      toDay.getTime() + ENVIRONMENT.APP.EXPIRATION_IN_MINUTE * 60 * 1000 <
-      shortener.createdDate.getTime()
+      shortener.createdDate.getTime() +
+        ENVIRONMENT.APP.EXPIRATION_IN_MINUTE * 60 * 1000 <
+      toDay.getTime()
     );
   }
 

@@ -7,11 +7,14 @@ import ENVIRONMENT from '@src/environment';
 import { STATUS } from '@libs/constants';
 const router = express.Router();
 
-router.get('/healthcheck', (_req: express.Request, res: express.Response) => {
-  res.send({ status: 'running' });
-});
+router.get(
+  `/${ENVIRONMENT.API.VERSION}/server/healthcheck`,
+  (_req: express.Request, res: express.Response) => {
+    res.send({ status: 'running' });
+  }
+);
 
-router.get("*", (req: express.Request, res: express.Response) => {
+router.get('*', (req: express.Request, res: express.Response) => {
   res.redirect(STATUS.REDIRECT, ENVIRONMENT.APP.FRONT_URL);
 });
 

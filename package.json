@@ -10,9 +10,11 @@
     "sonar-backend": "cd ./apps/shortener-api && node sonar-project.js",
     "ts-coverage-frontend": "npx typescript-coverage-report --project ./apps/shortener/tsconfig.app.json",
     "ts-coverage-backend": "npx typescript-coverage-report --project ./apps/shortener-api/tsconfig.app.json",
-    "e2e": "nx e2e shortener-e2e",
+    "e2e-frontend": "nx e2e shortener-e2e",
+    "e2e-backend": "npm run seed && nx e2e shortener-api-e2e",
     "up": "docker compose up --build -d",
-    "down": "docker compose down"
+    "down": "docker compose down",
+    "seed": "node -e 'require(\"./seeding/seeder.js\").seed()'"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +31,7 @@
     "express": "^4.18.1",
     "i18next": "^23.10.1",
     "i18next-http-backend": "^2.5.0",
+    "mongo-seeding": "^4.0.0",
     "mongoose": "^8.2.2",
     "nanoid": "^3.3.4",
     "react": "18.2.0",
@@ -76,7 +79,7 @@
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/coverage-v8": "^1.0.4",
     "@vitest/ui": "^1.3.1",
-    "cypress": "^13.6.6",
+    "cypress": "^13.7.1",
     "eslint": "~8.48.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-cypress": "^2.13.4",
