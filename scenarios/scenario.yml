@@ -1,0 +1,38 @@
+config:
+  target: "http://localhost:3333"
+  environments:
+    load:
+      phases:
+        - duration: 3
+          arrivalRate: 5
+          name: "Phase 1"
+        - duration: 3
+          arrivalRate: 20
+          name: "Phase 2"
+    functional:
+      phases:
+        - duration: 5
+          arrivalRate: 1
+          name: "Functionnal"
+      plugins:
+        expect:
+          outputFormat: silent
+
+scenarios:
+  - name: "[LOAD TEST] status"
+    flow:
+      - get:
+          url: "/v1/server/healthcheck"
+          expect:
+            - statusCode: 200
+  - name: "[LOAD TEST] Asking short link"
+    flow:
+      - post:
+          url: "/v1/shortener"
+          json:
+              longURL: "https://www.google.com"
+          expect:
+            - statusCode: 200
+            - hasProperty: 'data.longURL'
+            - hasProperty: 'data.shortURL'
+            - hasProperty: 'data.countUsage'

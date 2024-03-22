@@ -40,6 +40,8 @@ I explain with all the details how I build the project and my way of working.
          └── shortener-api-e2e            # The tests for the express backend (jest)
          └── shortener-e2e                # The tests for the react frontend (cypress)
     ├── env                               # Environment file
+    ├── scenarios                         # The scenario for the load testing
+    ├── seeding                           # Seed the database for the test
     ├── nginx                             # Contains the configuration for reverse proxy
     ├── node_modules                      # Contains all the dependencies of the two projects (monorepository)
     ├── .dockerignore                     # The file to ignore for docker

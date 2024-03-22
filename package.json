@@ -12,6 +12,7 @@
     "ts-coverage-backend": "npx typescript-coverage-report --project ./apps/shortener-api/tsconfig.app.json",
     "e2e-frontend": "nx e2e shortener-e2e",
     "e2e-backend": "npm run seed && nx e2e shortener-api-e2e",
+    "smoke-backend": "npx artillery run --environment load ./scenarios/scenario.yml",
     "up": "docker compose up --build -d",
     "down": "docker compose down",
     "seed": "node -e 'require(\"./seeding/seeder.js\").seed()'"
@@ -24,6 +25,8 @@
     "@mui/material": "^5.15.14",
     "@react-three/fiber": "^8.15.19",
     "@types/three": "^0.162.0",
+    "artillery": "^2.0.8",
+    "artillery-plugin-expect": "^2.3.3",
     "axios": "^1.6.8",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
