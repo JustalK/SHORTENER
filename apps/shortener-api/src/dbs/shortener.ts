@@ -15,8 +15,12 @@ class ShortenerDb extends WrapperDb {
    * Constructor of the ShortenerDB
    * @param model {Object} The shortener mongoose model
    */
-  constructor(model: typeof ShortenerModel) {
-    super(model);
+  constructor() {
+    super(ShortenerModel);
+  }
+
+  getObj<ShortenerType>(data): ShortenerType {
+    return this.make(data);
   }
 
   /**

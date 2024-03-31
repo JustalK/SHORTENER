@@ -1,0 +1,129 @@
+
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>redirect.ts</title>
+      <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" type="text/css" rel="stylesheet">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js" type="text/javascript" charset="utf-8"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css" type="text/css" rel="stylesheet">
+<script src="../../../../../assets/source-file.js" type="text/javascript" charset="utf-8"></script>
+<link href="../../../../../assets/source-file.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+    <div style="margin-top:3em" class="ui container"><h1 class="ui header"><a href="../../../../../index.html">TypeScript coverage report</a></h1><table style="margin-top:2em" class="ui celled table"><thead class=""><tr class=""><th class="">Filename</th><th class="">Percent</th><th class="">Threshold</th><th class="">Total</th><th class="">Covered</th><th class="">Uncovered</th></tr></thead><tbody class=""><tr class="positive"><td class="">apps/shortener-api/src/routes/redirect.ts</td><td class="">99.40%</td><td class="">80%</td><td class="">166</td><td class="">165</td><td class="">1</td></tr></tbody></table><textarea id="editor" readonly="" style="margin-top:3em">/**
+ * The service for managing everything related to the redirection to the long URL
+ * @module RedirectRoutes
+ */
+
+import express from &#x27;express&#x27;;
+import shortenerService from &#x27;@services/shortener&#x27;;
+import exceptionService from &#x27;@services/exception&#x27;;
+import { ShortenerServiceType, ShortenerType } from &#x27;@interfaces/shortener&#x27;;
+import { ExceptionServiceType, ExceptionType } from &#x27;@interfaces/error&#x27;;
+import { STATUS, ERROR } from &#x27;@libs/constants&#x27;;
+import ENVIRONMENT from &#x27;@src/environment&#x27;;
+import Base from &#x27;@libs/base&#x27;;
+const router = express.Router();
+
+/**
+ * Class handling the redirect routes
+ */
+class RedirectRoutes extends Base {
+  #router: express.Router;
+  #shortenerService: ShortenerServiceType;
+  #exceptionService: ExceptionServiceType;
+
+  /**
+   * Constructor for the routes handling the short discovery route
+   * @param shortenerService {Object} The service managing the shorteners
+   * @param exceptionService {Object} The service managing the exceptions
+   */
+  constructor(
+    shortenerService: ShortenerServiceType,
+    exceptionService: ExceptionServiceType
+  ) {
+    super();
+    this.#router = router;
+    this.#shortenerService = shortenerService;
+    this.#exceptionService = exceptionService;
+    this.#init();
+  }
+
+  /**
+   * Method for setting the route handling the short discovery url
+   */
+  #init() {
+    this.#router.get(&#x27;/:short&#x27;, this.handleGet.bind(this));
+  }
+
+  /**
+   * Check if the short url param is valid, if not create an exception
+   * @param req {Express.Request} The request of Express
+   * @returns {void|Exception} Return an exception if the short url is not valid or else nothing
+   */
+  handleGetReqValidator(req: express.Request): ExceptionType | null {
+    if (!req.params) {
+      return this.#exceptionService.createException(ERROR.X0005.KEY);
+    }
+
+    const { short }: { short?: string } = req.params;
+    if (!short) {
+      return this.#exceptionService.createException(ERROR.X0006.KEY);
+    }
+  }
+
+  /**
+   * Search for a long URL to redirect to
+   * @param req {Express.Request} The request of express
+   * @param res {Express.Response} the response of express
+   */
+  async handleGet(req: express.Request, res: express.Response) {
+    this.logger.debug(&#x27;[RedirectRoutes.handleGet] New attempt&#x27;);
+    const error = this.handleGetReqValidator(req);
+    if (error) {
+      return res.status(STATUS.ERROR).send({ error });
+    }
+
+    const { short }: { short?: string } = req.params;
+
+    let tmpShortened: ShortenerType | null = null;
+    try {
+      tmpShortened = await this.#shortenerService.getShortenUrl(short);
+    } catch (error: unknown) {
+      // Handle gracefully the unexpected error
+      this.logger.error(
+        `[ShortenerRoutes.handlePost] Unexpected error occured: ${JSON.stringify(
+          error
+        )}`
+      );
+      const unexpectedError = this.#exceptionService.createException(
+        ERROR.X0004.KEY
+      );
+      return res.status(STATUS.ERROR).send({ error: unexpectedError });
+    }
+
+    if (!tmpShortened) {
+      return res.redirect(STATUS.REDIRECT, `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0010.KEY}`);
+    }
+
+    const isExpired = this.#shortenerService.isExpired(tmpShortened);
+
+    if (isExpired) {
+      return res.redirect(STATUS.REDIRECT, `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0008.KEY}`);
+    }
+
+    const { longURL } = tmpShortened;
+    this.logger.debug(&#x27;[RedirectRoutes.handleGet] Success&#x27;);
+    res.redirect(STATUS.REDIRECT, longURL);
+  }
+}
+
+new RedirectRoutes(shortenerService, exceptionService);
+
+module.exports = router;
+</textarea><pre id="annotations" style="display:none">[{&quot;file&quot;:&quot;apps/shortener-api/src/routes/redirect.ts&quot;,&quot;line&quot;:110,&quot;character&quot;:7,&quot;text&quot;:&quot;exports&quot;,&quot;kind&quot;:1}]</pre></div>
+    <p class="footer-text">TypeScript Coverage Report generated by <a href="https://github.com/plantain-00/type-coverage">type-coverage</a> and <a href="https://github.com/alexcanessa/typescript-coverage-report">typescript-coverage-report</a> at Fri, 22 Mar 2024 15:14:30 GMT</p>
+    </body>
+  </html>
+  

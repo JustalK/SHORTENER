@@ -11,6 +11,10 @@ class WrapperDb {
     this.#model = model;
   }
 
+  make<T>(data: T): T {
+    return new this.#model(data);
+  }
+
   async create<T>(data: Document): Promise<T> {
     return this.#model.create(data);
   }

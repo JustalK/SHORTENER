@@ -4,7 +4,7 @@
  */
 
 import express from 'express';
-import shortenerService from '@services/shortener';
+import ShortenerService from '@services/shortener';
 import exceptionService from '@services/exception';
 import { ShortenerServiceType, ShortenerType } from '@interfaces/shortener';
 import { ExceptionServiceType, ExceptionType } from '@interfaces/error';
@@ -26,13 +26,10 @@ class RedirectRoutes extends Base {
    * @param shortenerService {Object} The service managing the shorteners
    * @param exceptionService {Object} The service managing the exceptions
    */
-  constructor(
-    shortenerService: ShortenerServiceType,
-    exceptionService: ExceptionServiceType
-  ) {
+  constructor(exceptionService: ExceptionServiceType) {
     super();
     this.#router = router;
-    this.#shortenerService = shortenerService;
+    this.#shortenerService = ShortenerService.getInstance();
     this.#exceptionService = exceptionService;
     this.#init();
   }
@@ -91,13 +88,19 @@ class RedirectRoutes extends Base {
     }
 
     if (!tmpShortened) {
-      return res.redirect(STATUS.REDIRECT, `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0010.KEY}`);
+      return res.redirect(
+        STATUS.REDIRECT,
+        `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0010.KEY}`
+      );
     }
 
     const isExpired = this.#shortenerService.isExpired(tmpShortened);
 
     if (isExpired) {
-      return res.redirect(STATUS.REDIRECT, `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0008.KEY}`);
+      return res.redirect(
+        STATUS.REDIRECT,
+        `${ENVIRONMENT.APP.FRONT_URL}?error=${ERROR.X0008.KEY}`
+      );
     }
 
     const { longURL } = tmpShortened;
@@ -106,6 +109,6 @@ class RedirectRoutes extends Base {
   }
 }
 
-new RedirectRoutes(shortenerService, exceptionService);
+new RedirectRoutes(exceptionService);
 
 module.exports = router;

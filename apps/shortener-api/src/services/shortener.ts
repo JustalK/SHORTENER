@@ -4,7 +4,6 @@
  */
 
 import ShortenerDb from '@dbs/shortener';
-import ShortenerModel from '@models/shortener';
 import ENVIRONMENT from '@src/environment';
 import {
   type ShortenerType,
@@ -16,15 +15,19 @@ import {
  * Class for handling anything related to the shortener
  */
 class ShortenerService implements ShortenerServiceType {
+  private static instance: ShortenerService;
   #shortenerDb: ShortenerDbType;
-  #shortenerModel: typeof ShortenerModel;
 
-  constructor(
-    shortenerDb: ShortenerDbType,
-    shortenerModel: typeof ShortenerModel
-  ) {
-    this.#shortenerDb = shortenerDb;
-    this.#shortenerModel = shortenerModel;
+  private constructor() {
+    this.#shortenerDb = new ShortenerDb();
+  }
+
+  public static getInstance() {
+    if (!ShortenerService.instance) {
+      ShortenerService.instance = new ShortenerService();
+    }
+
+    return ShortenerService.instance;
   }
 
   /**
@@ -65,7 +68,7 @@ class ShortenerService implements ShortenerServiceType {
    */
   async shortenUrl(longURL: string): Promise<ShortenerType> {
     // Prepare the object for saving
-    const tmpShortened = new this.#shortenerModel({
+    const tmpShortened = this.#shortenerDb.getObj({
       longURL,
     });
 
@@ -87,7 +90,4 @@ class ShortenerService implements ShortenerServiceType {
   }
 }
 
-const shortenerDb = new ShortenerDb(ShortenerModel);
-const shortenerService = new ShortenerService(shortenerDb, ShortenerModel);
-
-export default shortenerService;
+export default ShortenerService;

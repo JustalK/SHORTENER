@@ -34,6 +34,7 @@ export interface ShortenerDbType {
     longURL: ShortenerType[];
     shortURL: ShortenerType[];
   }>;
+  getObj: ({ longURL }: { longURL: string }) => ShortenerType;
 }
 
 export interface ShortenerServiceType {

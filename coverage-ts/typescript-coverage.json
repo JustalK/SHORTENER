@@ -1,221 +1,236 @@
 {
   "fileCounts": {
-    "apps/shortener/src/components/ui/Card/Card.tsx": {
-      "correctCount": 16,
-      "totalCount": 16
-    },
-    "apps/shortener/src/components/ui/Input/Input.tsx": {
-      "correctCount": 34,
-      "totalCount": 34
-    },
-    "apps/shortener/src/components/ui/Button/Button.tsx": {
-      "correctCount": 37,
-      "totalCount": 37
-    },
-    "apps/shortener/src/interfaces/options.ts": {
-      "correctCount": 5,
-      "totalCount": 5
-    },
-    "apps/shortener/src/interfaces/shortener.ts": {
-      "correctCount": 2,
-      "totalCount": 2
-    },
-    "apps/shortener/src/services/api/api.ts": {
-      "correctCount": 59,
-      "totalCount": 59
-    },
-    "apps/shortener/src/services/shortener.ts": {
-      "correctCount": 26,
-      "totalCount": 26
-    },
-    "apps/shortener/src/materials/FogMaterial.ts": {
-      "correctCount": 4,
-      "totalCount": 4
-    },
-    "apps/shortener/src/libs/3d.ts": {
-      "correctCount": 130,
-      "totalCount": 131
-    },
-    "apps/shortener/src/libs/utils.ts": {
-      "correctCount": 6,
-      "totalCount": 6
-    },
-    "apps/shortener/src/pages/Home/Home.tsx": {
-      "correctCount": 429,
-      "totalCount": 449
-    },
-    "apps/shortener/src/pages/Layout/Layout.tsx": {
-      "correctCount": 37,
-      "totalCount": 37
-    },
-    "apps/shortener/src/app/app.tsx": {
+    "apps/shortener-api/src/libs/utils.ts": {
       "correctCount": 20,
       "totalCount": 20
     },
-    "apps/shortener/src/main.tsx": {
-      "correctCount": 30,
-      "totalCount": 30
+    "apps/shortener-api/src/environment.ts": {
+      "correctCount": 55,
+      "totalCount": 55
     },
-    "apps/shortener/src/interfaces/error.ts": {
-      "correctCount": 2,
-      "totalCount": 2
+    "apps/shortener-api/src/libs/logger.ts": {
+      "correctCount": 18,
+      "totalCount": 18
     },
-    "apps/shortener/src/interfaces/jsx.ts": {
-      "correctCount": 9,
-      "totalCount": 9
+    "apps/shortener-api/src/libs/base.ts": {
+      "correctCount": 10,
+      "totalCount": 10
+    },
+    "apps/shortener-api/src/database.ts": {
+      "correctCount": 37,
+      "totalCount": 39
+    },
+    "apps/shortener-api/src/server.ts": {
+      "correctCount": 93,
+      "totalCount": 93
+    },
+    "apps/shortener-api/src/main.ts": {
+      "correctCount": 0,
+      "totalCount": 0
+    },
+    "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts": {
+      "correctCount": 73,
+      "totalCount": 85
+    },
+    "apps/shortener-api/src/interfaces/shortener.ts": {
+      "correctCount": 64,
+      "totalCount": 64
+    },
+    "apps/shortener-api/src/models/shortener.ts": {
+      "correctCount": 51,
+      "totalCount": 51
+    },
+    "apps/shortener-api/src/dbs/shortener.ts": {
+      "correctCount": 107,
+      "totalCount": 107
+    },
+    "apps/shortener-api/src/interfaces/error.ts": {
+      "correctCount": 7,
+      "totalCount": 7
+    },
+    "apps/shortener-api/src/libs/constants.ts": {
+      "correctCount": 40,
+      "totalCount": 40
+    },
+    "apps/shortener-api/src/services/shortener.ts": {
+      "correctCount": 86,
+      "totalCount": 86
+    },
+    "apps/shortener-api/src/services/exception.ts": {
+      "correctCount": 16,
+      "totalCount": 16
+    },
+    "apps/shortener-api/src/routes/redirect.ts": {
+      "correctCount": 165,
+      "totalCount": 166
+    },
+    "apps/shortener-api/src/routes/server.ts": {
+      "correctCount": 37,
+      "totalCount": 38
+    },
+    "apps/shortener-api/src/routes/shortener.ts": {
+      "correctCount": 165,
+      "totalCount": 171
     }
   },
   "anys": [
     {
-      "file": "apps/shortener/src/libs/3d.ts",
-      "line": 74,
-      "character": 40,
-      "text": "value",
+      "file": "apps/shortener-api/src/database.ts",
+      "line": 37,
+      "character": 13,
+      "text": "error",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 58,
-      "character": 12,
-      "text": "response",
+      "file": "apps/shortener-api/src/database.ts",
+      "line": 47,
+      "character": 7,
+      "text": "exports",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 59,
-      "character": 10,
-      "text": "response",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 8,
+      "character": 2,
+      "text": "#model",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 59,
-      "character": 22,
-      "text": "response",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 9,
+      "character": 14,
+      "text": "model",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 59,
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 10,
+      "character": 18,
+      "text": "model",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 14,
+      "character": 23,
+      "text": "create",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 18,
+      "character": 23,
+      "text": "findOne",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 21,
       "character": 31,
-      "text": "error",
+      "text": "data",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 60,
-      "character": 17,
-      "text": "response",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 22,
+      "character": 23,
+      "text": "findOneAndUpdate",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 60,
-      "character": 26,
-      "text": "error",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 22,
+      "character": 49,
+      "text": "$set",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 60,
-      "character": 32,
-      "text": "message",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 22,
+      "character": 55,
+      "text": "data",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 63,
-      "character": 30,
-      "text": "response",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 26,
+      "character": 23,
+      "text": "aggregate",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 63,
-      "character": 39,
-      "text": "shortURL",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 26,
+      "character": 35,
+      "text": "facet",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 64,
-      "character": 19,
-      "text": "response",
+      "file": "apps/shortener-api/src/dbs/wrapper/WrapperDb.ts",
+      "line": 38,
+      "character": 23,
+      "text": "findOneAndUpdate",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 64,
-      "character": 28,
+      "file": "apps/shortener-api/src/routes/redirect.ts",
+      "line": 110,
+      "character": 7,
+      "text": "exports",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/routes/server.ts",
+      "line": 20,
+      "character": 7,
+      "text": "exports",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/routes/shortener.ts",
+      "line": 55,
+      "character": 13,
+      "text": "body",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/routes/shortener.ts",
+      "line": 59,
+      "character": 56,
+      "text": "body",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/routes/shortener.ts",
+      "line": 66,
+      "character": 13,
+      "text": "err",
+      "kind": 1
+    },
+    {
+      "file": "apps/shortener-api/src/routes/shortener.ts",
+      "line": 95,
+      "character": 12,
       "text": "longURL",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 65,
-      "character": 31,
-      "text": "response",
+      "file": "apps/shortener-api/src/routes/shortener.ts",
+      "line": 95,
+      "character": 28,
+      "text": "body",
       "kind": 1
     },
     {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 65,
-      "character": 40,
-      "text": "shortURL",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 66,
-      "character": 22,
-      "text": "response",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 66,
-      "character": 31,
-      "text": "countUsage",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 154,
-      "character": 49,
-      "text": "value",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 169,
-      "character": 42,
-      "text": "value",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 169,
-      "character": 48,
-      "text": "x",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 171,
-      "character": 42,
-      "text": "value",
-      "kind": 1
-    },
-    {
-      "file": "apps/shortener/src/pages/Home/Home.tsx",
-      "line": 171,
-      "character": 48,
-      "text": "y",
+      "file": "apps/shortener-api/src/routes/shortener.ts",
+      "line": 123,
+      "character": 7,
+      "text": "exports",
       "kind": 1
     }
   ],
-  "percentage": 97.57785467128028,
-  "total": 867,
-  "covered": 846,
-  "uncovered": 21
+  "percentage": 97.93621013133209,
+  "total": 1066,
+  "covered": 1044,
+  "uncovered": 22
 }
