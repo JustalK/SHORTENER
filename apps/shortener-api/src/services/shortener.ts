@@ -19,7 +19,7 @@ class ShortenerService implements ShortenerServiceType {
   #shortenerDb: ShortenerDbType;
 
   private constructor() {
-    this.#shortenerDb = new ShortenerDb();
+    this.#shortenerDb = ShortenerDb.getInstance();
   }
 
   public static getInstance() {

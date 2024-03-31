@@ -6,17 +6,28 @@
 import WrapperDb from '@dbs/wrapper/WrapperDb';
 import { ShortenerType } from '@interfaces/shortener';
 import ShortenerModel from '@models/shortener';
+import mongoose from 'mongoose';
+const conn = mongoose.connection;
 
 /**
  * Class for managing the interaction to the shortener collection
  */
 class ShortenerDb extends WrapperDb {
+  private static instance: ShortenerDb;
   /**
    * Constructor of the ShortenerDB
    * @param model {Object} The shortener mongoose model
    */
-  constructor() {
+  private constructor() {
     super(ShortenerModel);
+  }
+
+  public static getInstance() {
+    if (!ShortenerDb.instance) {
+      ShortenerDb.instance = new ShortenerDb();
+    }
+
+    return ShortenerDb.instance;
   }
 
   getObj<ShortenerType>(data): ShortenerType {
@@ -29,7 +40,21 @@ class ShortenerDb extends WrapperDb {
    * @returns {Object} The saved shortener object
    */
   async save(tmpShortened: ShortenerType): Promise<ShortenerType> {
-    return this.create<ShortenerType>(tmpShortened);
+    let result;
+    const session = await conn.startSession();
+    try {
+      session.startTransaction();
+      result = await ShortenerModel.create([tmpShortened], { session });
+
+      await session.commitTransaction();
+      console.log('SUCCESS');
+    } catch (error) {
+      console.log(error);
+      await session.abortTransaction();
+    }
+    session.endSession();
+    console.log(result);
+    return result[0];
   }
 
   /**

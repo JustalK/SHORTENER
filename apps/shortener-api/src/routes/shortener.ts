@@ -5,7 +5,7 @@
 
 import express from 'express';
 import ShortenerService from '@services/shortener';
-import exceptionService from '@services/exception';
+import ExceptionService from '@services/exception';
 import Base from '@libs/base';
 import { ShortenerServiceType, ShortenerType } from '@interfaces/shortener';
 import { ExceptionServiceType, ExceptionType } from '@interfaces/error';
@@ -27,11 +27,11 @@ class ShortenerRoutes extends Base {
    * @param shortenerService {Object} The service managing the shorteners
    * @param exceptionService {Object} The service managing the exceptions
    */
-  constructor(exceptionService: ExceptionServiceType) {
+  constructor() {
     super();
     this.#router = router;
     this.#shortenerService = ShortenerService.getInstance();
-    this.#exceptionService = exceptionService;
+    this.#exceptionService = ExceptionService.getInstance();
     this.#init();
   }
 
@@ -116,6 +116,6 @@ class ShortenerRoutes extends Base {
   }
 }
 
-new ShortenerRoutes(exceptionService);
+new ShortenerRoutes();
 
 module.exports = router;

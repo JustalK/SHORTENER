@@ -10,6 +10,19 @@ import { type ExceptionType, ExceptionServiceType } from '@interfaces/error';
  * Class for managing the exception
  */
 class ExceptionService implements ExceptionServiceType {
+  private static instance: ExceptionService;
+
+  private constructor() {
+    // Cannot be instantiated
+  }
+
+  public static getInstance() {
+    if (!ExceptionService.instance) {
+      ExceptionService.instance = new ExceptionService();
+    }
+
+    return ExceptionService.instance;
+  }
   /**
    * Create exception based on the code
    * @param code {string} The error code
@@ -23,6 +36,4 @@ class ExceptionService implements ExceptionServiceType {
   }
 }
 
-const exceptionService = new ExceptionService();
-
-export default exceptionService;
+export default ExceptionService;
