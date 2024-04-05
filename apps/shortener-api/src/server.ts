@@ -54,12 +54,12 @@ class Server extends Base {
    */
   #routes() {
     this.#app.use('/', express.static(__dirname + '/../shortener'));
-    this.#app.use('/', require('@routes/redirect'));
+    this.#app.use('/', require('@routes/redirect.route'));
     this.#app.use(
       `/${ENVIRONMENT.API.VERSION}/shortener`,
-      require('@routes/shortener')
+      require('@routes/shortener.route')
     );
-    this.#app.use('/', require('@routes/server'));
+    this.#app.use('/', require('@routes/server.route'));
   }
 
   /**

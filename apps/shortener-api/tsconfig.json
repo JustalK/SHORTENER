@@ -15,8 +15,8 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@dbs/*": [
-        "./src/dbs/*"
+      "@repositories/*": [
+        "./src/repositories/*"
       ],
       "@interfaces/*": [
         "./src/interfaces/*"

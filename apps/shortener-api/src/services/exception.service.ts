@@ -4,7 +4,10 @@
  */
 
 import { ERROR } from '@libs/constants';
-import { type ExceptionType, ExceptionServiceType } from '@interfaces/error';
+import {
+  type ExceptionType,
+  ExceptionServiceType,
+} from '@interfaces/error.interface';
 
 /**
  * Class for managing the exception

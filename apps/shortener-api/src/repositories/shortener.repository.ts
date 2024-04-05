@@ -1,33 +1,35 @@
 /**
  * The module for managing the interaction to the Shortener collection
- * @module ShortenerDb
+ * @module ShortenerRepository
  */
 
-import WrapperDb from '@dbs/wrapper/WrapperDb';
-import { ShortenerType } from '@interfaces/shortener';
-import ShortenerModel from '@models/shortener';
 import mongoose from 'mongoose';
-const conn = mongoose.connection;
+import WrapperRepository from '@repositories/wrapper/wrapper.repository';
+import { ShortenerType } from '@interfaces/shortener.interface';
+import ShortenerModel from '@models/shortener.model';
 
 /**
  * Class for managing the interaction to the shortener collection
  */
-class ShortenerDb extends WrapperDb {
-  private static instance: ShortenerDb;
+class ShortenerRepository extends WrapperRepository {
+  private static instance: ShortenerRepository;
+  #conn;
+
   /**
-   * Constructor of the ShortenerDB
+   * Constructor of the ShortenerRepository
    * @param model {Object} The shortener mongoose model
    */
-  private constructor() {
-    super(ShortenerModel);
+  private constructor(dependencies) {
+    super(dependencies.model);
+    this.#conn = dependencies.orm.connection;
   }
 
-  public static getInstance() {
-    if (!ShortenerDb.instance) {
-      ShortenerDb.instance = new ShortenerDb();
+  public static getInstance(dependencies) {
+    if (!ShortenerRepository.instance) {
+      ShortenerRepository.instance = new ShortenerRepository(dependencies);
     }
 
-    return ShortenerDb.instance;
+    return ShortenerRepository.instance;
   }
 
   getObj<ShortenerType>(data): ShortenerType {
@@ -41,7 +43,7 @@ class ShortenerDb extends WrapperDb {
    */
   async save(tmpShortened: ShortenerType): Promise<ShortenerType> {
     let result;
-    const session = await conn.startSession();
+    const session = await this.#conn.startSession();
     try {
       session.startTransaction();
       result = await ShortenerModel.create([tmpShortened], { session });
@@ -141,4 +143,7 @@ class ShortenerDb extends WrapperDb {
   }
 }
 
-export default ShortenerDb;
+export default ShortenerRepository.getInstance({
+  model: ShortenerModel,
+  orm: mongoose,
+});

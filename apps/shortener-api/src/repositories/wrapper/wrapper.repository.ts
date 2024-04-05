@@ -1,11 +1,11 @@
 /**
  * The module for wrap the ORM in case we want to change it in the futur
  * Since all the call are regrouped here, it will be easy to change database or ORM
- * @module WrapperDb
+ * @module WrapperRepository
  */
 import { Document } from 'mongoose';
 
-class WrapperDb {
+class WrapperRepository {
   #model;
   constructor(model) {
     this.#model = model;
@@ -46,4 +46,4 @@ class WrapperDb {
   }
 }
 
-export default WrapperDb;
+export default WrapperRepository;

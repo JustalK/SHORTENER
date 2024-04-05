@@ -3,28 +3,28 @@
  * @module ShortenerService
  */
 
-import ShortenerDb from '@dbs/shortener';
+import ShortenerRepository from '@repositories/shortener.repository';
 import ENVIRONMENT from '@src/environment';
 import {
   type ShortenerType,
   ShortenerServiceType,
   ShortenerDbType,
-} from '@interfaces/shortener';
+} from '@interfaces/shortener.interface';
 
 /**
  * Class for handling anything related to the shortener
  */
 class ShortenerService implements ShortenerServiceType {
   private static instance: ShortenerService;
-  #shortenerDb: ShortenerDbType;
+  #shortenerRepository: ShortenerDbType;
 
-  private constructor() {
-    this.#shortenerDb = ShortenerDb.getInstance();
+  private constructor(dependencies) {
+    this.#shortenerRepository = dependencies.repository;
   }
 
-  public static getInstance() {
+  public static getInstance(dependencies) {
     if (!ShortenerService.instance) {
-      ShortenerService.instance = new ShortenerService();
+      ShortenerService.instance = new ShortenerService(dependencies);
     }
 
     return ShortenerService.instance;
@@ -50,13 +50,13 @@ class ShortenerService implements ShortenerServiceType {
    * @returns {Shortener} The shortener object found
    */
   async getShortenUrl(shortURL: string): Promise<ShortenerType> {
-    await this.#shortenerDb.incrementByShortUrl(
+    await this.#shortenerRepository.incrementByShortUrl(
       {
         shortURL,
       },
       'countUsage'
     );
-    return this.#shortenerDb.getByShortUrl({ shortURL });
+    return this.#shortenerRepository.getByShortUrl({ shortURL });
   }
 
   /**
@@ -68,26 +68,28 @@ class ShortenerService implements ShortenerServiceType {
    */
   async shortenUrl(longURL: string): Promise<ShortenerType> {
     // Prepare the object for saving
-    const tmpShortened = this.#shortenerDb.getObj({
+    const tmpShortened = this.#shortenerRepository.getObj({
       longURL,
     });
 
     // Check if this shortener already exist
-    const isExist = await this.#shortenerDb.isExist(tmpShortened);
+    const isExist = await this.#shortenerRepository.isExist(tmpShortened);
     // Check if a shortener already exist to optimize the database size
     // If it exist, we use the previous registered shorterned url
     if (isExist.longURL.length === 1) {
-      return this.#shortenerDb.getByLongUrl(tmpShortened);
+      return this.#shortenerRepository.getByLongUrl(tmpShortened);
     }
 
     // Check if a shortener already exist with the same shortURL
     // if it already exist, replace it
     if (isExist.shortURL.length === 1) {
-      return this.#shortenerDb.updateByShortUrl(tmpShortened);
+      return this.#shortenerRepository.updateByShortUrl(tmpShortened);
     }
 
-    return this.#shortenerDb.save(tmpShortened);
+    return this.#shortenerRepository.save(tmpShortened);
   }
 }
 
-export default ShortenerService;
+export default ShortenerService.getInstance({
+  repository: ShortenerRepository,
+});

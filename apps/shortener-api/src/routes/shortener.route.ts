@@ -4,11 +4,17 @@
  */
 
 import express from 'express';
-import ShortenerService from '@services/shortener';
-import ExceptionService from '@services/exception';
+import ShortenerService from '@services/shortener.service';
+import ExceptionService from '@services/exception.service';
 import Base from '@libs/base';
-import { ShortenerServiceType, ShortenerType } from '@interfaces/shortener';
-import { ExceptionServiceType, ExceptionType } from '@interfaces/error';
+import {
+  ShortenerServiceType,
+  ShortenerType,
+} from '@interfaces/shortener.interface';
+import {
+  ExceptionServiceType,
+  ExceptionType,
+} from '@interfaces/error.interface';
 import { STATUS, ERROR } from '@libs/constants';
 import axios from 'axios';
 
@@ -30,7 +36,7 @@ class ShortenerRoutes extends Base {
   constructor() {
     super();
     this.#router = router;
-    this.#shortenerService = ShortenerService.getInstance();
+    this.#shortenerService = ShortenerService;
     this.#exceptionService = ExceptionService.getInstance();
     this.#init();
   }

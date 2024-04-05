@@ -4,10 +4,16 @@
  */
 
 import express from 'express';
-import ShortenerService from '@services/shortener';
-import ExceptionService from '@services/exception';
-import { ShortenerServiceType, ShortenerType } from '@interfaces/shortener';
-import { ExceptionServiceType, ExceptionType } from '@interfaces/error';
+import ShortenerService from '@services/shortener.service';
+import ExceptionService from '@services/exception.service';
+import {
+  ShortenerServiceType,
+  ShortenerType,
+} from '@interfaces/shortener.interface';
+import {
+  ExceptionServiceType,
+  ExceptionType,
+} from '@interfaces/error.interface';
 import { STATUS, ERROR } from '@libs/constants';
 import ENVIRONMENT from '@src/environment';
 import Base from '@libs/base';
@@ -29,7 +35,7 @@ class RedirectRoutes extends Base {
   constructor() {
     super();
     this.#router = router;
-    this.#shortenerService = ShortenerService.getInstance();
+    this.#shortenerService = ShortenerService;
     this.#exceptionService = ExceptionService.getInstance();
     this.#init();
   }
