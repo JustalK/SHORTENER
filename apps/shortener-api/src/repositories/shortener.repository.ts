@@ -5,7 +5,7 @@
 
 import mongoose from 'mongoose';
 import WrapperRepository from '@repositories/wrapper/wrapper.repository';
-import { ShortenerType } from '@interfaces/shortener.interface';
+import { ShortenerType } from '@root/types';
 import ShortenerModel from '@models/shortener.model';
 
 /**

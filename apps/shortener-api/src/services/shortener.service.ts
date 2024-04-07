@@ -6,10 +6,10 @@
 import ShortenerRepository from '@repositories/shortener.repository';
 import ENVIRONMENT from '@src/environment';
 import {
-  type ShortenerType,
   ShortenerServiceType,
   ShortenerDbType,
 } from '@interfaces/shortener.interface';
+import { ShortenerType } from '@root/types';
 
 /**
  * Class for handling anything related to the shortener

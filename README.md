@@ -12,6 +12,18 @@ I explain with all the details how I build the project and my way of working.
 - [System](#system)
 - [Errors](#errors)
 
+## Development
+
+#### Sharing interface between projects
+
+Create a library at the root of the project using NX command:
+
+```bash
+$ nx generate @nrwl/js:library types
+```
+
+A path pointing to the lib will be added in `tsconfig.base.json`. Since the other tsconfig are extending the tsconfig base, the path will be available in each project.
+
 ## Organization
 
 #### Organization of the project

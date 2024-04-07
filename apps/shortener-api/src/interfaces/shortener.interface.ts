@@ -1,16 +1,6 @@
-import { Document } from 'mongoose';
-
-export interface ShortenerType extends Document {
-  longURL: string;
-  shortURL: string;
-  countUsage: number;
-  createdDate: Date;
-  isArchive?: boolean;
-  toDTO: (fields: string[]) => Partial<ShortenerType>;
-}
-
+import { ShortenerType } from '@root/types';
 export interface ShortenerDbType {
-  save: (tmpShortened: Document) => Promise<ShortenerType>;
+  save: (tmpShortened: ShortenerType) => Promise<ShortenerType>;
   getByShortUrl: ({ shortURL }: { shortURL: string }) => Promise<ShortenerType>;
   getByLongUrl: ({ longURL }: { longURL: string }) => Promise<ShortenerType>;
   incrementByShortUrl: (

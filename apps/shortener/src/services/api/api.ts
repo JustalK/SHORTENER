@@ -1,5 +1,5 @@
 import { OptionsType } from '../../interfaces/options';
-import { ShortenerType } from '../../interfaces/shortener';
+import { ShortenerType } from '@root/types';
 
 const options = {
   headers: {

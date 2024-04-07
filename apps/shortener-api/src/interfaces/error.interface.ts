@@ -1,8 +1,4 @@
-export interface ExceptionType {
-  code: string;
-  message: string;
-}
-
+import { ExceptionType } from '@root/types';
 export interface ExceptionServiceType {
   createException(code: string): ExceptionType;
 }

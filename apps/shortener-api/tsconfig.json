@@ -15,6 +15,9 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
+      "@root/*": [
+        "../../*"
+      ],
       "@repositories/*": [
         "./src/repositories/*"
       ],

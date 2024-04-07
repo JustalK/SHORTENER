@@ -7,14 +7,9 @@ import express from 'express';
 import ShortenerService from '@services/shortener.service';
 import ExceptionService from '@services/exception.service';
 import Base from '@libs/base';
-import {
-  ShortenerServiceType,
-  ShortenerType,
-} from '@interfaces/shortener.interface';
-import {
-  ExceptionServiceType,
-  ExceptionType,
-} from '@interfaces/error.interface';
+import { ShortenerServiceType } from '@interfaces/shortener.interface';
+import { ExceptionServiceType } from '@interfaces/error.interface';
+import { ShortenerType, ExceptionType } from '@root/types';
 import { STATUS, ERROR } from '@libs/constants';
 import axios from 'axios';
 
