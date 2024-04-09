@@ -18,6 +18,9 @@
       "@root/*": [
         "../../*"
       ],
+      "@controllers/*": [
+        "./src/controllers/*"
+      ],
       "@repositories/*": [
         "./src/repositories/*"
       ],

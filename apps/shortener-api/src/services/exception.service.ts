@@ -37,4 +37,4 @@ class ExceptionService implements ExceptionServiceType {
   }
 }
 
-export default ExceptionService;
+export default ExceptionService.getInstance();
