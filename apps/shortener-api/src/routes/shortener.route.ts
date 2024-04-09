@@ -43,6 +43,39 @@ class ShortenerRoute extends Base {
    * Save the longUrl and shorten it if possible
    * @param req {Express.Request} The request of express
    * @param res {Express.Response} the response of express
+   *
+   * @swagger
+   * /v1/shortener:
+   *   post:
+   *     summary: Check if the server is running
+   *     description: Check the status of the server
+   *     tags:
+   *       - Shortener
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               longURL:
+   *                 type: string
+   *                 description: URL to shorten
+   *                 example: https://www.npmjs.com/package/prettier
+   *     responses:
+   *       200:
+   *         description: Status of the server.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 longURL:
+   *                   type: string
+   *                 shortURL:
+   *                   type: string
+   *                 countUsage:
+   *                   type: number
    */
   async handlePost(req: express.Request, res: express.Response) {
     return this.#shortenerController.saveShortURL(req, res);

@@ -24,6 +24,28 @@ $ nx generate @nrwl/js:library types
 
 A path pointing to the lib will be added in `tsconfig.base.json`. Since the other tsconfig are extending the tsconfig base, the path will be available in each project.
 
+#### Setting Swagger for api documentation
+
+In order to be able to use swagger, we install the dependencies:
+
+```bash
+$ npm i swagger-jsdoc swagger-ui-express --save-dev
+```
+
+We then, set up the extensions in `server.ts` and put the options in the folder `docs`:
+
+```js
+const specs = swaggerJsdoc(options);
+this.#app.use(
+     `/${ENVIRONMENT.API.VERSION}/docs`,
+     swaggerUi.serve,
+     swaggerUi.setup(specs)
+);
+```
+
+And finally, we put the documentation of the api as close as possible as the api endpoints in `routes`.
+
+
 ## Organization
 
 #### Organization of the project

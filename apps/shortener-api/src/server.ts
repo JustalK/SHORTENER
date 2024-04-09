@@ -8,6 +8,9 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import ENVIRONMENT from '@src/environment';
 import Base from '@libs/base';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import options from '@docs/options';
 
 /**
  * Class for creating the express server
@@ -46,6 +49,14 @@ class Server extends Base {
       bodyParser.urlencoded({
         extended: true,
       })
+    );
+
+    // Take care of swagger documentation
+    const specs = swaggerJsdoc(options);
+    this.#app.use(
+      `/${ENVIRONMENT.API.VERSION}/docs`,
+      swaggerUi.serve,
+      swaggerUi.setup(specs)
     );
   }
 

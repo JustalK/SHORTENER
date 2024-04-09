@@ -12,6 +12,13 @@ dotenv.config({ path: './env/.env.' + mode });
  */
 const ENVIRONMENT = {
   MODE: process.env.NODE_ENV,
+  PROJECT: {
+    NAME: 'SHORTENER',
+    CONTACT: {
+      NAME: 'JUSTALK',
+      EMAIL: 'justalk@gmail.com',
+    },
+  },
   SERVER: {
     PROTOCOL: process.env.API_PROTOCOL,
     HOST: process.env.API_HOST,

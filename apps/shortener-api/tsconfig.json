@@ -21,6 +21,9 @@
       "@controllers/*": [
         "./src/controllers/*"
       ],
+      "@docs/*": [
+        "./src/docs/*"
+      ],
       "@repositories/*": [
         "./src/repositories/*"
       ],
