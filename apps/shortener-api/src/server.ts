@@ -12,6 +12,11 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import options from '@docs/options';
 
+// Routes to import
+import RedirectRoute from '@routes/redirect.route';
+import ServerRoute from '@routes/server.route';
+import ShortenerRoute from '@routes/shortener.route';
+
 /**
  * Class for creating the express server
  */
@@ -64,13 +69,14 @@ class Server extends Base {
    * Add the route to our express server
    */
   #routes() {
-    this.#app.use('/', express.static(__dirname + '/../shortener'));
-    this.#app.use('/', require('@routes/redirect.route'));
     this.#app.use(
-      `/${ENVIRONMENT.API.VERSION}/shortener`,
-      require('@routes/shortener.route')
+      `/${ENVIRONMENT.API.VERSION}/typescript/backend`,
+      express.static(__dirname + '/../coverage-ts-backend')
     );
-    this.#app.use('/', require('@routes/server.route'));
+    this.#app.use('/', express.static(__dirname + '/../shortener'));
+    this.#app.use('/', RedirectRoute);
+    this.#app.use(`/${ENVIRONMENT.API.VERSION}/shortener`, ShortenerRoute);
+    this.#app.use('/', ServerRoute);
   }
 
   /**

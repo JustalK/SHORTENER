@@ -6,13 +6,18 @@
 import express from 'express';
 import ShortenerService from '@services/shortener.service';
 import ExceptionService from '@services/exception.service';
+import ShortenerDao from '@daos/shortener.dao';
 import Base from '@libs/base';
-import { ShortenerServiceType } from '@interfaces/shortener.interface';
+import {
+  ShortenerServiceType,
+  ShortenerDaoType,
+  ShortenerControllerDependenciesType,
+} from '@interfaces/shortener.interface';
 import { ExceptionServiceType } from '@interfaces/error.interface';
-import { ShortenerType, ExceptionType } from '@root/types';
+import { CustomRequest } from '@interfaces/response.interface';
+import { ExceptionType, ShortenerType } from '@root/types';
 import ENVIRONMENT from '@src/environment';
 import { STATUS, ERROR } from '@libs/constants';
-import axios from 'axios';
 
 /**
  * Class for the shortener POST route
@@ -21,18 +26,22 @@ class ShortenerController extends Base {
   private static instance: ShortenerController;
   #shortenerService: ShortenerServiceType;
   #exceptionService: ExceptionServiceType;
+  #shortenerDao: ShortenerDaoType;
 
   /**
    * Constructor of the ShortenerRepository
    * @param model {Object} The shortener mongoose model
    */
-  private constructor(dependencies) {
+  private constructor(dependencies: ShortenerControllerDependenciesType) {
     super();
     this.#shortenerService = dependencies.shortenerService;
     this.#exceptionService = dependencies.exceptionService;
+    this.#shortenerDao = dependencies.shortenerDao;
   }
 
-  public static getInstance(dependencies) {
+  public static getInstance(
+    dependencies: ShortenerControllerDependenciesType
+  ): ShortenerController {
     if (!ShortenerController.instance) {
       ShortenerController.instance = new ShortenerController(dependencies);
     }
@@ -41,55 +50,27 @@ class ShortenerController extends Base {
   }
 
   /**
-   * Check if the body parameter longURL is valid
-   * @param req {Express.Request} The request from express
-   * @returns {null|Exception} Return exception if longURL is not value or else nothing
-   */
-  async handlePostReqValidator(
-    req: express.Request
-  ): Promise<ExceptionType | null> {
-    if (!req.body) {
-      return this.#exceptionService.createException(ERROR.X0001.KEY);
-    }
-
-    const { longURL }: { longURL: string | null } = req.body;
-    if (!longURL) {
-      return this.#exceptionService.createException(ERROR.X0002.KEY);
-    }
-
-    try {
-      new URL(longURL);
-    } catch (err) {
-      return this.#exceptionService.createException(ERROR.X0003.KEY);
-    }
-
-    try {
-      const result = await axios.get(longURL);
-      if (result.status !== STATUS.SUCCESS) {
-        return this.#exceptionService.createException(ERROR.X0011.KEY);
-      }
-    } catch (e: unknown) {
-      return this.#exceptionService.createException(ERROR.X0011.KEY);
-    }
-  }
-
-  /**
    * Save the longUrl and shorten it if possible
    * @param req {Express.Request} The request of express
    * @param res {Express.Response} the response of express
    */
-  async saveShortURL(req: express.Request, res: express.Response) {
+  async saveShortURL(
+    req: CustomRequest<{ longURL: string }>,
+    res: express.Response
+  ): Promise<express.Response> {
     this.logger.debug('[ShortenerRoutes.handlePost] New attempt');
 
     // Check if the parameter is valid
-    const error = await this.handlePostReqValidator(req);
+    const error: ExceptionType = await this.#shortenerDao.saveShortURLValidator(
+      req
+    );
     if (error) {
       return res.status(STATUS.ERROR).send({ error });
     }
 
     // Get the parameter
-    const { longURL } = req.body;
-    let newShortened: ShortenerType | null = null;
+    const { longURL }: { longURL: string } = req.body;
+    let newShortened: ShortenerType;
 
     try {
       // Try to shorten the URL
@@ -101,32 +82,19 @@ class ShortenerController extends Base {
           error
         )}`
       );
-      const unexpectedError = this.#exceptionService.createException(
-        ERROR.X0004.KEY
-      );
+      const unexpectedError: ExceptionType =
+        this.#exceptionService.createException(ERROR.X0004.KEY);
       return res.status(STATUS.ERROR).send({ error: unexpectedError });
     }
 
     // Limit the request to longURL and shortURL
-    const response = newShortened.toDTO(['longURL', 'shortURL', 'countUsage']);
+    const response: Partial<ShortenerType> = newShortened.toDTO([
+      'longURL',
+      'shortURL',
+      'countUsage',
+    ]);
     this.logger.debug('[ShortenerRoutes.handlePost] Success');
     res.status(STATUS.SUCCESS).send(response);
-  }
-
-  /**
-   * Check if the short url param is valid, if not create an exception
-   * @param req {Express.Request} The request of Express
-   * @returns {void|Exception} Return an exception if the short url is not valid or else nothing
-   */
-  handleGetReqValidator(req: express.Request): ExceptionType | null {
-    if (!req.params) {
-      return this.#exceptionService.createException(ERROR.X0005.KEY);
-    }
-
-    const { short }: { short?: string } = req.params;
-    if (!short) {
-      return this.#exceptionService.createException(ERROR.X0006.KEY);
-    }
   }
 
   /**
@@ -134,16 +102,20 @@ class ShortenerController extends Base {
    * @param req {Express.Request} The request of express
    * @param res {Express.Response} the response of express
    */
-  async redirectToLongURL(req: express.Request, res: express.Response) {
+  async redirectToLongURL(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response | void> {
     this.logger.debug('[RedirectRoutes.handleGet] New attempt');
-    const error = this.handleGetReqValidator(req);
+    const error: ExceptionType =
+      this.#shortenerDao.redirectToLongURLValidator(req);
     if (error) {
       return res.status(STATUS.ERROR).send({ error });
     }
 
     const { short }: { short?: string } = req.params;
 
-    let tmpShortened: ShortenerType | null = null;
+    let tmpShortened: ShortenerType;
     try {
       tmpShortened = await this.#shortenerService.getShortenUrl(short);
     } catch (error: unknown) {
@@ -153,9 +125,8 @@ class ShortenerController extends Base {
           error
         )}`
       );
-      const unexpectedError = this.#exceptionService.createException(
-        ERROR.X0004.KEY
-      );
+      const unexpectedError: ExceptionType =
+        this.#exceptionService.createException(ERROR.X0004.KEY);
       return res.status(STATUS.ERROR).send({ error: unexpectedError });
     }
 
@@ -166,7 +137,7 @@ class ShortenerController extends Base {
       );
     }
 
-    const isExpired = this.#shortenerService.isExpired(tmpShortened);
+    const isExpired: boolean = this.#shortenerService.isExpired(tmpShortened);
 
     if (isExpired) {
       return res.redirect(
@@ -175,7 +146,7 @@ class ShortenerController extends Base {
       );
     }
 
-    const { longURL } = tmpShortened;
+    const { longURL }: { longURL: string } = tmpShortened;
     this.logger.debug('[RedirectRoutes.handleGet] Success');
     res.redirect(STATUS.REDIRECT, longURL);
   }
@@ -184,4 +155,5 @@ class ShortenerController extends Base {
 export default ShortenerController.getInstance({
   shortenerService: ShortenerService,
   exceptionService: ExceptionService,
+  shortenerDao: ShortenerDao,
 });

@@ -5,8 +5,9 @@
 
 import express from 'express';
 import ShortenerController from '@controllers/shortener.controller';
+import { ShortenerControllerType } from '@interfaces/shortener.interface';
+import { ShortenerRouteType } from '@interfaces/route.interface';
 import Base from '@libs/base';
-
 const router = express.Router();
 
 /**
@@ -31,16 +32,16 @@ const router = express.Router();
 class RedirectRoute extends Base {
   private static instance: RedirectRoute;
   #router: express.Router;
-  #shortenerController;
+  #shortenerController: ShortenerControllerType;
 
-  private constructor(dependencies) {
+  private constructor(dependencies: ShortenerRouteType) {
     super();
     this.#router = dependencies.router;
     this.#shortenerController = dependencies.shortenerController;
     this.#init();
   }
 
-  public static getInstance(dependencies) {
+  public static getInstance(dependencies: ShortenerRouteType): RedirectRoute {
     if (!RedirectRoute.instance) {
       RedirectRoute.instance = new RedirectRoute(dependencies);
     }
@@ -51,7 +52,7 @@ class RedirectRoute extends Base {
   /**
    * Method for setting the route handling the short discovery url
    */
-  #init() {
+  #init(): void {
     this.#router.get('/:short', this.handleGet.bind(this));
   }
 
@@ -78,7 +79,10 @@ class RedirectRoute extends Base {
    *       301:
    *         description: Redirect to the home page
    */
-  async handleGet(req: express.Request, res: express.Response) {
+  async handleGet(
+    req: express.Request,
+    res: express.Response
+  ): Promise<void | express.Response> {
     return this.#shortenerController.redirectToLongURL(req, res);
   }
 }
@@ -88,4 +92,4 @@ RedirectRoute.getInstance({
   router,
 });
 
-module.exports = router;
+export default router;

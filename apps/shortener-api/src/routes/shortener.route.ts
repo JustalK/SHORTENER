@@ -5,6 +5,8 @@
 
 import express from 'express';
 import ShortenerController from '@controllers/shortener.controller';
+import { ShortenerControllerType } from '@interfaces/shortener.interface';
+import { ShortenerRouteType } from '@interfaces/route.interface';
 import Base from '@libs/base';
 
 const router = express.Router();
@@ -15,16 +17,16 @@ const router = express.Router();
 class ShortenerRoute extends Base {
   private static instance: ShortenerRoute;
   #router: express.Router;
-  #shortenerController;
+  #shortenerController: ShortenerControllerType;
 
-  private constructor(dependencies) {
+  private constructor(dependencies: ShortenerRouteType) {
     super();
     this.#router = dependencies.router;
     this.#shortenerController = dependencies.shortenerController;
     this.#init();
   }
 
-  public static getInstance(dependencies) {
+  public static getInstance(dependencies: ShortenerRouteType): ShortenerRoute {
     if (!ShortenerRoute.instance) {
       ShortenerRoute.instance = new ShortenerRoute(dependencies);
     }
@@ -35,7 +37,7 @@ class ShortenerRoute extends Base {
   /**
    * Method for setting the route handling the save of links
    */
-  #init() {
+  #init(): void {
     this.#router.post('/', this.handlePost.bind(this));
   }
 
@@ -77,7 +79,10 @@ class ShortenerRoute extends Base {
    *                 countUsage:
    *                   type: number
    */
-  async handlePost(req: express.Request, res: express.Response) {
+  async handlePost(
+    req: express.Request,
+    res: express.Response
+  ): Promise<express.Response> {
     return this.#shortenerController.saveShortURL(req, res);
   }
 }
@@ -87,4 +92,4 @@ ShortenerRoute.getInstance({
   router,
 });
 
-module.exports = router;
+export default router;

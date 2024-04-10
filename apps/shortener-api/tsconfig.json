@@ -21,6 +21,9 @@
       "@controllers/*": [
         "./src/controllers/*"
       ],
+      "@daos/*": [
+        "./src/daos/*"
+      ],
       "@docs/*": [
         "./src/docs/*"
       ],

@@ -43,8 +43,39 @@ this.#app.use(
 );
 ```
 
-And finally, we put the documentation of the api as close as possible as the api endpoints in `routes`.
+And finally, we put the documentation of the api as close as possible as the api endpoints in `routes`.  
+The documentation can be consulted at: [http://localhost:3333/v1/docs](http://localhost:3333/v1/docs)  
 
+![0.png](./documentations/images/swagger/0.png)
+
+#### Typescript
+
+###### Backend
+
+For checking my level of coverage of the typing, I am using the package `typescript-coverage-report`.  
+The coverage has been push till 100%. Everything has been typed properly.
+
+```bash
+$ npm i typescript-coverage-report --save-dev
+```
+
+To create the coverage page, simply run the following command:  
+
+```bash
+$ npm run ts-coverage-backend
+```
+
+![0.png](./documentations/images/typescript/0.png)
+
+If you want more information, the report can be watch through the api once the previous command has been run at least once:
+
+```bash
+$ nx server shortener-api
+```
+
+You can then look the report at this URL: [http://localhost:3333/v1/typescript/backend/](http://localhost:3333/v1/typescript/backend/)
+
+![1.png](./documentations/images/typescript/1.png)
 
 ## Organization
 
@@ -66,10 +97,14 @@ And finally, we put the documentation of the api as close as possible as the api
                      └── styles           # The style of the frontend
          └── shortener-api                # The express backend
                 └── src                   # The source file
-                     └── dbs              # The link to the database
+                     └── controllers      # The controllers of the api
+                     └── daos             # The data object validating the parameter of the entering request
+                     └── docs             # The options for the swagger
                      └── interfaces       # The interface for typescript
                      └── libs             # The libs containing constant, logger and utils
                      └── models           # The model to save in the database
+                     └── repositories     # The repository allowing operations to the db
+                     └── routes           # The routes allowed by the api
                      └── services         # The services of the backend
          └── shortener-api-e2e            # The tests for the express backend (jest)
          └── shortener-e2e                # The tests for the react frontend (cypress)

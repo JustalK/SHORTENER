@@ -10,6 +10,8 @@ import {
   ShortenerDbType,
 } from '@interfaces/shortener.interface';
 import { ShortenerType } from '@root/types';
+import ShortenerModel from '@models/shortener.model';
+import { AnyKeys } from 'mongoose';
 
 /**
  * Class for handling anything related to the shortener
@@ -18,11 +20,11 @@ class ShortenerService implements ShortenerServiceType {
   private static instance: ShortenerService;
   #shortenerRepository: ShortenerDbType;
 
-  private constructor(dependencies) {
+  private constructor(dependencies: { repository: ShortenerDbType }) {
     this.#shortenerRepository = dependencies.repository;
   }
 
-  public static getInstance(dependencies) {
+  public static getInstance(dependencies: { repository: ShortenerDbType }) {
     if (!ShortenerService.instance) {
       ShortenerService.instance = new ShortenerService(dependencies);
     }
@@ -54,7 +56,7 @@ class ShortenerService implements ShortenerServiceType {
       {
         shortURL,
       },
-      'countUsage'
+      'countUsage' as AnyKeys<typeof ShortenerModel>
     );
     return this.#shortenerRepository.getByShortUrl({ shortURL });
   }

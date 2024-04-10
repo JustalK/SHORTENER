@@ -35,7 +35,7 @@ class Database extends Base {
     try {
       this.#mongoose.connect(this.#uri);
       this.logger.info(`[Database.init] DB Connection to ${this.#uri}`);
-    } catch (error) {
+    } catch (_error: unknown) {
       this.logger.error(
         '[Database.init] An error occured when connecting to the DB'
       );
@@ -45,4 +45,4 @@ class Database extends Base {
 
 const database = new Database(ENVIRONMENT.DATABASE.URI);
 
-module.exports = database;
+export default database;

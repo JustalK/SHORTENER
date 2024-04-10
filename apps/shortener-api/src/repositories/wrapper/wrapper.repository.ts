@@ -3,31 +3,40 @@
  * Since all the call are regrouped here, it will be easy to change database or ORM
  * @module WrapperRepository
  */
-import { Document } from 'mongoose';
+import {
+  Model,
+  Document,
+  AnyKeys,
+  AnyObject,
+  UpdateQuery,
+  PipelineStage,
+} from 'mongoose';
 
-class WrapperRepository {
-  #model;
-  constructor(model) {
+class WrapperRepository<M extends Document> {
+  #model: Model<M>;
+  constructor(model: Model<M>) {
     this.#model = model;
   }
 
-  make<T>(data: T): T {
+  make<D>(data: D): M {
     return new this.#model(data);
   }
 
-  async create<T>(data: Document): Promise<T> {
+  async create(data: Document): Promise<M> {
     return this.#model.create(data);
   }
 
-  async findOne<T, Q>(query: Q): Promise<T> {
+  async findOne<Q>(query: Q): Promise<M> {
     return this.#model.findOne(query);
   }
 
-  async update<T, Q>(query: Q, data): Promise<T> {
+  async update<Q>(query: Q, data: UpdateQuery<M>): Promise<M> {
     return this.#model.findOneAndUpdate(query, { $set: data });
   }
 
-  async facet<T, Q>(query: Q): Promise<T> {
+  async facet(
+    query: Record<string, PipelineStage.FacetPipelineStage[]>
+  ): Promise<M[]> {
     return this.#model.aggregate().facet(query);
   }
 
@@ -39,9 +48,10 @@ class WrapperRepository {
     return { $limit: limit };
   }
 
-  async increment<T, Q>(query: Q, field: string): Promise<T> {
+  async increment<Q>(query: Q, field: AnyKeys<M> & AnyObject): Promise<M> {
+    // This part cannot be type without any because typescript always cannot handle a key instead of a string
     return this.#model.findOneAndUpdate(query, {
-      $inc: { [field]: 1 },
+      $inc: { [field as any]: 1 },
     });
   }
 }

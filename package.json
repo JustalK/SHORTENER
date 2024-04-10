@@ -9,7 +9,7 @@
     "sonar-frontend": "cd ./apps/shortener && node sonar-project.js",
     "sonar-backend": "cd ./apps/shortener-api && node sonar-project.js",
     "ts-coverage-frontend": "npx typescript-coverage-report --project ./apps/shortener/tsconfig.app.json",
-    "ts-coverage-backend": "npx typescript-coverage-report --project ./apps/shortener-api/tsconfig.app.json",
+    "ts-coverage-backend": "npx typescript-coverage-report --project ./apps/shortener-api/tsconfig.app.json -o ./dist/apps/coverage-ts-backend",
     "e2e-frontend": "nx e2e shortener-e2e",
     "e2e-backend": "npm run seed && nx e2e shortener-api-e2e",
     "smoke-backend": "npx artillery run --environment load ./scenarios/scenario.yml",
@@ -24,6 +24,7 @@
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@react-three/fiber": "^8.15.19",
+    "@types/express": "^4.17.21",
     "@types/three": "^0.162.0",
     "artillery": "^2.0.8",
     "artillery-plugin-expect": "^2.3.3",
@@ -51,7 +52,8 @@
     "typescript-coverage-report": "^1.0.0",
     "valid-url": "^1.0.9",
     "vite-plugin-static-copy": "^1.0.1",
-    "winston": "^3.12.0"
+    "winston": "^3.12.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@nx/cypress": "18.1.1",

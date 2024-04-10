@@ -3,7 +3,7 @@
  * @module ShortenerRepository
  */
 
-import mongoose from 'mongoose';
+import mongoose, { AnyKeys } from 'mongoose';
 import WrapperRepository from '@repositories/wrapper/wrapper.repository';
 import { ShortenerType } from '@root/types';
 import ShortenerModel from '@models/shortener.model';
@@ -11,20 +11,26 @@ import ShortenerModel from '@models/shortener.model';
 /**
  * Class for managing the interaction to the shortener collection
  */
-class ShortenerRepository extends WrapperRepository {
+class ShortenerRepository extends WrapperRepository<any> {
   private static instance: ShortenerRepository;
-  #conn;
+  #conn: mongoose.Connection;
 
   /**
    * Constructor of the ShortenerRepository
    * @param model {Object} The shortener mongoose model
    */
-  private constructor(dependencies) {
+  private constructor(dependencies: {
+    model: typeof ShortenerModel;
+    orm: typeof mongoose;
+  }) {
     super(dependencies.model);
     this.#conn = dependencies.orm.connection;
   }
 
-  public static getInstance(dependencies) {
+  public static getInstance(dependencies: {
+    model: typeof ShortenerModel;
+    orm: typeof mongoose;
+  }) {
     if (!ShortenerRepository.instance) {
       ShortenerRepository.instance = new ShortenerRepository(dependencies);
     }
@@ -32,8 +38,8 @@ class ShortenerRepository extends WrapperRepository {
     return ShortenerRepository.instance;
   }
 
-  getObj<ShortenerType>(data): ShortenerType {
-    return this.make(data);
+  getObj<ShortenerType>({ longURL }: { longURL: string }): ShortenerType {
+    return this.make<string>(longURL);
   }
 
   /**
@@ -42,20 +48,19 @@ class ShortenerRepository extends WrapperRepository {
    * @returns {Object} The saved shortener object
    */
   async save(tmpShortened: ShortenerType): Promise<ShortenerType> {
-    let result;
+    let result: unknown;
     const session = await this.#conn.startSession();
     try {
       session.startTransaction();
-      result = await ShortenerModel.create([tmpShortened], { session });
+      result = await ShortenerModel.create<ShortenerType>([tmpShortened], {
+        session,
+      });
 
       await session.commitTransaction();
-      console.log('SUCCESS');
-    } catch (error) {
-      console.log(error);
+    } catch (_error: unknown) {
       await session.abortTransaction();
     }
     session.endSession();
-    console.log(result);
     return result[0];
   }
 
@@ -65,7 +70,7 @@ class ShortenerRepository extends WrapperRepository {
    * @returns {Object} The found shortener object
    */
   async getByShortUrl({ shortURL }: ShortenerType): Promise<ShortenerType> {
-    return this.findOne<ShortenerType, { shortURL: string }>({ shortURL });
+    return this.findOne<{ shortURL: string }>({ shortURL });
   }
 
   /**
@@ -74,7 +79,7 @@ class ShortenerRepository extends WrapperRepository {
    * @returns {Object} The found shortener object
    */
   async getByLongUrl({ longURL }: ShortenerType): Promise<ShortenerType> {
-    return this.findOne<ShortenerType, { longURL: string }>({ longURL });
+    return this.findOne<{ longURL: string }>({ longURL });
   }
 
   /**
@@ -84,12 +89,9 @@ class ShortenerRepository extends WrapperRepository {
    */
   async incrementByShortUrl(
     { shortURL }: ShortenerType,
-    field: string
+    field: AnyKeys<typeof ShortenerModel>
   ): Promise<ShortenerType> {
-    return this.increment<ShortenerType, { shortURL: string }>(
-      { shortURL },
-      field
-    );
+    return this.increment<{ shortURL: string }>({ shortURL }, field);
   }
 
   /**
@@ -102,7 +104,7 @@ class ShortenerRepository extends WrapperRepository {
     shortURL,
     longURL,
   }: ShortenerType): Promise<ShortenerType> {
-    return this.update<ShortenerType, { shortURL: string }>(
+    return this.update<{ shortURL: string }>(
       { shortURL },
       { longURL, isArchive: false, countUsage: 0 }
     );
@@ -128,13 +130,7 @@ class ShortenerRepository extends WrapperRepository {
     const query2 = this.queryMatch<{ shortURL: string }>({ shortURL });
     const limit = this.queryLimit<number>(1);
 
-    const result = await this.facet<
-      { longURL: string; shortURL: string },
-      {
-        longURL: ({ $match: { longURL: string } } | { $limit: number })[];
-        shortURL: ({ $match: { shortURL: string } } | { $limit: number })[];
-      }
-    >({
+    const result = await this.facet({
       longURL: [query1, limit],
       shortURL: [query2, limit],
     });
