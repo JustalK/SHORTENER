@@ -73,6 +73,10 @@ class Server extends Base {
       `/${ENVIRONMENT.API.VERSION}/typescript/backend`,
       express.static(__dirname + '/../coverage-ts-backend')
     );
+    this.#app.use(
+      `/${ENVIRONMENT.API.VERSION}/test/backend`,
+      express.static(__dirname + '/../coverage-test-backend/lcov-report')
+    );
     this.#app.use('/', express.static(__dirname + '/../shortener'));
     this.#app.use('/', RedirectRoute);
     this.#app.use(`/${ENVIRONMENT.API.VERSION}/shortener`, ShortenerRoute);

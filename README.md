@@ -48,6 +48,58 @@ The documentation can be consulted at: [http://localhost:3333/v1/docs](http://lo
 
 ![0.png](./documentations/images/swagger/0.png)
 
+#### Setting Jest for unit tests
+
+In order to configure the test on the shortener-api, you need to add a target in the `project.json` of the shortener-api project:
+
+```json
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/dist/apps/coverage-test-backend"],
+      "options": {
+        "jestConfig": "apps/shortener-api/jest.config.ts",
+        "codeCoverage": true,
+        "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
+        "coverageReporters": [
+          "clover",
+          "json",
+          "lcov",
+          "text-summary"
+        ],
+        "passWithNoTests": true
+      }
+    }
+```
+
+Once done, we also need to modify in ``jest.config.ts`, the `coverageDirectory` in order to move the lcov result in the dist directory in order to be able to access through the express server:
+
+```json
+{
+     "coverageDirectory": "../../dist/apps/coverage-test-backend",
+}
+```
+
+Finally, in the express server, we add the route to serve our index as a static resource:
+
+```js
+    this.#app.use(
+      `/${ENVIRONMENT.API.VERSION}/test/backend`,
+      express.static(__dirname + '/../coverage-test-backend/lcov-report')
+    );
+```
+
+In order to generate the result, run the following command:
+
+```bash
+$ nx test shortener-api
+# OR
+$ npm run test-unit-backend
+```
+
+You can then access the result through the url: [http://localhost:3333/v1/test/backend/](http://localhost:3333/v1/test/backend/)
+
+PS: Since we are using the "test" command, the environment variable is "test". The environment file need to be set in consequence.
+
 #### Typescript
 
 ###### Backend

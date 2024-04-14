@@ -21,7 +21,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "outputs": ["{workspaceRoot}/dist/apps/coverage-test-backend"],
       "options": {
         "jestConfig": "apps/shortener-api/jest.config.ts",
         "codeCoverage": true,
