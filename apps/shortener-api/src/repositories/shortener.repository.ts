@@ -39,7 +39,7 @@ class ShortenerRepository extends WrapperRepository<any> {
   }
 
   getObj<ShortenerType>({ longURL }: { longURL: string }): ShortenerType {
-    return this.make<string>(longURL);
+    return this.make<{ longURL: string }>({ longURL });
   }
 
   /**
