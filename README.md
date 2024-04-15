@@ -100,6 +100,8 @@ You can then access the result through the url: [http://localhost:3333/v1/test/b
 
 PS: Since we are using the "test" command, the environment variable is "test". The environment file need to be set in consequence.
 
+![0.png](./documentations/images/units-test/0.png)
+
 #### Typescript
 
 ###### Backend

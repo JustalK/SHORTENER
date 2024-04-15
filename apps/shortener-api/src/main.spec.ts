@@ -1,4 +1,4 @@
-import '@src/main';
+//import '@src/main';
 
 describe('Environment test', () => {
   it('Test if some value has been set', () => {

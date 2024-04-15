@@ -22,7 +22,7 @@ import { STATUS, ERROR } from '@libs/constants';
 /**
  * Class for the shortener POST route
  */
-class ShortenerController extends Base {
+export class ShortenerController extends Base {
   private static instance: ShortenerController;
   #shortenerService: ShortenerServiceType;
   #exceptionService: ExceptionServiceType;
@@ -42,7 +42,7 @@ class ShortenerController extends Base {
   public static getInstance(
     dependencies: ShortenerControllerDependenciesType
   ): ShortenerController {
-    if (!ShortenerController.instance) {
+    if (!ShortenerController.instance || ENVIRONMENT.MODE === 'test') {
       ShortenerController.instance = new ShortenerController(dependencies);
     }
 
