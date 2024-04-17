@@ -5,13 +5,14 @@
 
 import mongoose, { AnyKeys } from 'mongoose';
 import WrapperRepository from '@repositories/wrapper/wrapper.repository';
+import ENVIRONMENT from '@src/environment';
 import { ShortenerType } from '@root/types';
 import ShortenerModel from '@models/shortener.model';
 
 /**
  * Class for managing the interaction to the shortener collection
  */
-class ShortenerRepository extends WrapperRepository<any> {
+export class ShortenerRepository extends WrapperRepository<any> {
   private static instance: ShortenerRepository;
   #conn: mongoose.Connection;
 
@@ -31,7 +32,7 @@ class ShortenerRepository extends WrapperRepository<any> {
     model: typeof ShortenerModel;
     orm: typeof mongoose;
   }) {
-    if (!ShortenerRepository.instance) {
+    if (!ShortenerRepository.instance || ENVIRONMENT.MODE === 'test') {
       ShortenerRepository.instance = new ShortenerRepository(dependencies);
     }
 

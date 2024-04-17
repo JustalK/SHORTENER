@@ -16,7 +16,7 @@ import { AnyKeys } from 'mongoose';
 /**
  * Class for handling anything related to the shortener
  */
-class ShortenerService implements ShortenerServiceType {
+export class ShortenerService implements ShortenerServiceType {
   private static instance: ShortenerService;
   #shortenerRepository: ShortenerDbType;
 
@@ -25,7 +25,7 @@ class ShortenerService implements ShortenerServiceType {
   }
 
   public static getInstance(dependencies: { repository: ShortenerDbType }) {
-    if (!ShortenerService.instance) {
+    if (!ShortenerService.instance || ENVIRONMENT.MODE === 'test') {
       ShortenerService.instance = new ShortenerService(dependencies);
     }
 

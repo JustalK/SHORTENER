@@ -149,7 +149,7 @@ describe('ShortenerController', () => {
     expect(response._getData().error.code).toEqual('X0001');
     expect(response._getData().error.message).toEqual('Unexpected Message');
   });
-  it.only('[FAIL][redirectToLongURL] The validator fail', async () => {
+  it('[FAIL][redirectToLongURL] The validator fail', async () => {
     const shortenerController = ShortenerController.getInstance({
       shortenerService,
       exceptionService,
@@ -216,5 +216,146 @@ describe('ShortenerController', () => {
     expect(response.statusCode).toEqual(500);
     expect(response._getData().error.code).toEqual('X0002');
     expect(response._getData().error.message).toEqual('Unexpected Message');
+  });
+  it('[FAIL][redirectToLongURL] Tmp is not defined', async () => {
+    const shortenerController = ShortenerController.getInstance({
+      shortenerService: {
+        shortenUrl: async (longURL: string) => {
+          return new shortenerModel({ longURL }) as ShortenerType;
+        },
+        isExpired: () => {
+          return true;
+        },
+        getShortenUrl: async () => {
+          return null;
+        },
+      },
+      exceptionService: {
+        createException: () => {
+          return {
+            code: 'X0002',
+            message: 'Unexpected Message',
+          } as ExceptionType;
+        },
+      },
+      shortenerDao: {
+        saveShortURLValidator: async () => {
+          return null;
+        },
+        redirectToLongURLValidator: () => {
+          return null;
+        },
+      },
+    });
+
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/whatever',
+      params: {
+        short: 'azazeae',
+      },
+    });
+    const response = httpMocks.createResponse({
+      eventEmitter: require('events').EventEmitter,
+    });
+    await shortenerController.redirectToLongURL(request, response);
+    expect(response.statusCode).toEqual(301);
+    expect(response._getRedirectUrl()).toEqual(
+      'http://localhost:4200/?error=X0010'
+    );
+  });
+  it('[FAIL][redirectToLongURL] Link is Expired', async () => {
+    const shortenerController = ShortenerController.getInstance({
+      shortenerService: {
+        shortenUrl: async (longURL: string) => {
+          return new shortenerModel({ longURL }) as ShortenerType;
+        },
+        isExpired: () => {
+          return true;
+        },
+        getShortenUrl: async (longURL: string) => {
+          return new shortenerModel({ longURL }) as ShortenerType;
+        },
+      },
+      exceptionService: {
+        createException: () => {
+          return {
+            code: 'X0002',
+            message: 'Unexpected Message',
+          } as ExceptionType;
+        },
+      },
+      shortenerDao: {
+        saveShortURLValidator: async () => {
+          return null;
+        },
+        redirectToLongURLValidator: () => {
+          return null;
+        },
+      },
+    });
+
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/whatever',
+      params: {
+        short: 'azazeae',
+      },
+    });
+    const response = httpMocks.createResponse({
+      eventEmitter: require('events').EventEmitter,
+    });
+    await shortenerController.redirectToLongURL(request, response);
+    expect(response.statusCode).toEqual(301);
+    expect(response._getRedirectUrl()).toEqual(
+      'http://localhost:4200/?error=X0008'
+    );
+  });
+  it('[SUCCESS][redirectToLongURL] Get the long url', async () => {
+    const shortenerController = ShortenerController.getInstance({
+      shortenerService: {
+        shortenUrl: async (longURL: string) => {
+          return new shortenerModel({ longURL }) as ShortenerType;
+        },
+        isExpired: () => {
+          return false;
+        },
+        getShortenUrl: async () => {
+          return new shortenerModel({
+            longURL: 'http://www.google.com',
+          }) as ShortenerType;
+        },
+      },
+      exceptionService: {
+        createException: () => {
+          return {
+            code: 'X0002',
+            message: 'Unexpected Message',
+          } as ExceptionType;
+        },
+      },
+      shortenerDao: {
+        saveShortURLValidator: async () => {
+          return null;
+        },
+        redirectToLongURLValidator: () => {
+          return null;
+        },
+      },
+    });
+
+    const request = httpMocks.createRequest({
+      method: 'POST',
+      url: '/whatever',
+      params: {
+        short: 'azazeae',
+      },
+    });
+    const response = httpMocks.createResponse({
+      eventEmitter: require('events').EventEmitter,
+    });
+    await shortenerController.redirectToLongURL(request, response);
+    expect(response.statusCode).toEqual(301);
+    expect(response._getRedirectUrl()).toEqual('http://www.google.com');
   });
 });

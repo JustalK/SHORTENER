@@ -9,13 +9,14 @@ import { ExceptionServiceType } from '@interfaces/error.interface';
 import { CustomRequest } from '@interfaces/response.interface';
 import { ExceptionType } from '@root/types';
 import { STATUS, ERROR } from '@libs/constants';
-import axios from 'axios';
 import { z } from 'zod';
+import ENVIRONMENT from '@src/environment';
+import axios from 'axios';
 
 /**
  * Class for the shortener POST route
  */
-class ShortenerDao {
+export class ShortenerDao {
   private static instance: ShortenerDao;
   #exceptionService: ExceptionServiceType;
   #saveShortURLValidatorSchema = z.object({
@@ -38,7 +39,7 @@ class ShortenerDao {
   public static getInstance(dependencies: {
     exceptionService: ExceptionServiceType;
   }) {
-    if (!ShortenerDao.instance) {
+    if (!ShortenerDao.instance || ENVIRONMENT.MODE === 'test') {
       ShortenerDao.instance = new ShortenerDao(dependencies);
     }
 
