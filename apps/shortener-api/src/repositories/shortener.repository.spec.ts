@@ -5,7 +5,6 @@ import { ShortenerType } from '@root/types/src';
 
 describe('ExceptionService', () => {
   let orm: typeof mongoose;
-  let model: typeof ShortenerModel;
   beforeAll(() => {
     orm = {
       connection: null,
@@ -120,7 +119,67 @@ describe('ExceptionService', () => {
       longURL: 'https://www.google.com',
       shortURL: 'qsd4564',
     });
-    console.log(result);
     // Dont know how to do for the moment
+  });
+  it('[SUCCESS][save] Save a shortener in the db', async () => {
+    const shortener = new ShortenerModel({
+      longURL: 'https://www.google.com',
+      shortURL: 'qsd4564',
+    }) as ShortenerType;
+    const repository = ShortenerRepository.getInstance({
+      orm: {
+        connection: {
+          startSession: () => {
+            return {
+              startTransaction: () => {
+                return true;
+              },
+              commitTransaction: async () => {
+                return true;
+              },
+              endSession: () => {
+                return true;
+              },
+            };
+          },
+        },
+      } as any,
+      model: {
+        create: async (data) => {
+          const { longURL, shortURL } = data[0];
+          return [new ShortenerModel({ longURL, shortURL })];
+        },
+      } as typeof ShortenerModel,
+    });
+    const result = await repository.save(shortener);
+    expect(result.longURL).toEqual('https://www.google.com');
+    expect(result.shortURL).toEqual('qsd4564');
+  });
+  it('[FAIL][save] Fail to save a shortener ', async () => {
+    const shortener = new ShortenerModel({
+      longURL: 'https://www.google.com',
+      shortURL: 'qsd4564',
+    }) as ShortenerType;
+    const repository = ShortenerRepository.getInstance({
+      orm: {
+        connection: {
+          startSession: () => {
+            return {
+              startTransaction: () => {
+                return true;
+              },
+              abortTransaction: async () => {
+                return true;
+              },
+            };
+          },
+        },
+      } as any,
+      model: {
+        create: null,
+      } as typeof ShortenerModel,
+    });
+    const result = await repository.save(shortener);
+    expect(result).toBeUndefined();
   });
 });

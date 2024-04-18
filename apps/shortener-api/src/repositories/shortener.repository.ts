@@ -53,15 +53,17 @@ export class ShortenerRepository extends WrapperRepository<any> {
     const session = await this.#conn.startSession();
     try {
       session.startTransaction();
-      result = await ShortenerModel.create<ShortenerType>([tmpShortened], {
+      result = await this.create([tmpShortened], {
         session,
       });
 
       await session.commitTransaction();
     } catch (_error: unknown) {
       await session.abortTransaction();
+      return;
     }
     session.endSession();
+
     return result[0];
   }
 

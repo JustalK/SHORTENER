@@ -10,6 +10,7 @@ import {
   AnyObject,
   UpdateQuery,
   PipelineStage,
+  CreateOptions,
 } from 'mongoose';
 
 class WrapperRepository<M extends Document> {
@@ -22,8 +23,8 @@ class WrapperRepository<M extends Document> {
     return new this.#model(data);
   }
 
-  async create(data: Document): Promise<M> {
-    return this.#model.create(data);
+  async create(data: any, options?: CreateOptions): Promise<any> {
+    return this.#model.create(data, options);
   }
 
   async findOne<Q>(query: Q): Promise<M> {
