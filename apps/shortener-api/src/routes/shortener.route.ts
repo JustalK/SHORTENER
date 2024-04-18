@@ -7,6 +7,7 @@ import express from 'express';
 import ShortenerController from '@controllers/shortener.controller';
 import { ShortenerControllerType } from '@interfaces/shortener.interface';
 import { ShortenerRouteType } from '@interfaces/route.interface';
+import ENVIRONMENT from '@src/environment';
 import Base from '@libs/base';
 
 const router = express.Router();
@@ -14,7 +15,7 @@ const router = express.Router();
 /**
  * Class for the shortener POST route
  */
-class ShortenerRoute extends Base {
+export class ShortenerRoute extends Base {
   private static instance: ShortenerRoute;
   #router: express.Router;
   #shortenerController: ShortenerControllerType;
@@ -27,7 +28,7 @@ class ShortenerRoute extends Base {
   }
 
   public static getInstance(dependencies: ShortenerRouteType): ShortenerRoute {
-    if (!ShortenerRoute.instance) {
+    if (!ShortenerRoute.instance || ENVIRONMENT.MODE === 'test') {
       ShortenerRoute.instance = new ShortenerRoute(dependencies);
     }
 

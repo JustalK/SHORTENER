@@ -5,6 +5,7 @@ import { ShortenerType } from '@root/types/src';
 
 describe('ExceptionService', () => {
   let orm: typeof mongoose;
+  let model: typeof ShortenerModel;
   beforeAll(() => {
     orm = {
       connection: null,
