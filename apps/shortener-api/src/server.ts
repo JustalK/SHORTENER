@@ -20,7 +20,7 @@ import ShortenerRoute from '@routes/shortener.route';
 /**
  * Class for creating the express server
  */
-class Server extends Base {
+export class Server extends Base {
   // The express server
   #app: express.Application;
 

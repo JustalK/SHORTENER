@@ -10,7 +10,7 @@ import Base from '@libs/base';
 /**
  * Class for connecting to the mongoDB instance
  */
-class Database extends Base {
+export class Database extends Base {
   // The mongoose ORM
   #mongoose: typeof import('mongoose');
   // The mongoDB uri
@@ -25,13 +25,13 @@ class Database extends Base {
     super();
     this.#mongoose = mongoose;
     this.#uri = uri;
-    this.#init();
+    this.init();
   }
 
   /**
    * Initialize the database by connecting to the mongoDB instance
    */
-  #init() {
+  init() {
     try {
       this.#mongoose.connect(this.#uri);
       this.logger.info(`[Database.init] DB Connection to ${this.#uri}`);
@@ -40,6 +40,11 @@ class Database extends Base {
         '[Database.init] An error occured when connecting to the DB'
       );
     }
+  }
+
+  close() {
+    this.#mongoose.connection.close();
+    return true;
   }
 }
 
