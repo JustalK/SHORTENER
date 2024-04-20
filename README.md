@@ -131,6 +131,44 @@ You can then look the report at this URL: [http://localhost:3333/v1/typescript/b
 
 ![1.png](./documentations/images/typescript/1.png)
 
+#### Absolute Path
+
+###### Backend
+
+In order to make absolute path possible, you need to config in the file `tsconfig.json` of each project the following properties:
+
+```json
+    "baseUrl": ".",
+    "paths": {
+      "@controllers/*": [
+        "./src/controllers/*"
+      ],
+    }
+```
+
+###### Frontend
+
+For the frontend, it's exactly the same as for the backend with one difference.  
+The plugin `vite-tsconfig-paths` need to be install and configure in vite:
+
+```bash
+$ npm i -D vite-tsconfig-paths
+```
+
+Then in `vite.config.mjs`, just add the plugin:
+
+```js
+    plugins: [
+      tsconfigPaths(),
+    ],
+```
+
+Then, it's possible to add the path using the following typo:
+
+```js
+import Home from '@pages/Home/Home';
+```
+
 ## Organization
 
 #### Organization of the project
