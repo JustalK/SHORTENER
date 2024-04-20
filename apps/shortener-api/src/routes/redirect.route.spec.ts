@@ -1,26 +1,25 @@
 import { ShortenerController } from '@controllers/shortener.controller';
-import { ShortenerRoute } from './shortener.route';
+import { RedirectRoute } from './redirect.route';
 
-describe('ShortenerRoute', () => {
+describe('RedirectRoute', () => {
   let shortenerController: ShortenerController;
   beforeAll(() => {
     shortenerController = {
-      saveShortURL: () => {
+      redirectToLongURL: () => {
         return null;
       },
-      redirectToLongURL: null,
     } as any;
   });
-  it('[SUCCESS][handlePost] Test if the saveShortURL is called', async () => {
-    const controller = ShortenerRoute.getInstance({
+  it('[SUCCESS][handleGet] Test if the redirectToLongURL is called', async () => {
+    const controller = RedirectRoute.getInstance({
       shortenerController,
       router: {
-        post: () => {
+        get: () => {
           return null;
         },
       } as any,
     });
-    const result = await controller.handlePost(null, null);
+    const result = await controller.handleGet(null, null);
     expect(result).toBeNull();
   });
 });

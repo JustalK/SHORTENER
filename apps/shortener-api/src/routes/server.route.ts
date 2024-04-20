@@ -13,7 +13,7 @@ const router = express.Router();
 /**
  * Class for the shortener POST route
  */
-class ServerRoute extends Base {
+export class ServerRoute extends Base {
   private static instance: ServerRoute;
   #router: express.Router;
 
@@ -24,7 +24,7 @@ class ServerRoute extends Base {
   }
 
   public static getInstance(dependencies: RouteType): ServerRoute {
-    if (!ServerRoute.instance) {
+    if (!ServerRoute.instance || ENVIRONMENT.MODE === 'test') {
       ServerRoute.instance = new ServerRoute(dependencies);
     }
 

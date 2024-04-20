@@ -7,6 +7,7 @@ import express from 'express';
 import ShortenerController from '@controllers/shortener.controller';
 import { ShortenerControllerType } from '@interfaces/shortener.interface';
 import { ShortenerRouteType } from '@interfaces/route.interface';
+import ENVIRONMENT from '@src/environment';
 import Base from '@libs/base';
 const router = express.Router();
 
@@ -29,7 +30,7 @@ const router = express.Router();
 /**
  * Class handling the redirect routes
  */
-class RedirectRoute extends Base {
+export class RedirectRoute extends Base {
   private static instance: RedirectRoute;
   #router: express.Router;
   #shortenerController: ShortenerControllerType;
@@ -42,7 +43,7 @@ class RedirectRoute extends Base {
   }
 
   public static getInstance(dependencies: ShortenerRouteType): RedirectRoute {
-    if (!RedirectRoute.instance) {
+    if (!RedirectRoute.instance || ENVIRONMENT.MODE === 'test') {
       RedirectRoute.instance = new RedirectRoute(dependencies);
     }
 
