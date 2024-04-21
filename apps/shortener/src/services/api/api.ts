@@ -1,4 +1,4 @@
-import { OptionsType } from '../../interfaces/options';
+import { OptionsType } from '@interfaces/options';
 import { ShortenerType } from '@root/types';
 
 const options = {
@@ -36,7 +36,7 @@ async function callApi(path: string, options: OptionsType) {
  * @param body The body of the call
  * @returns The result of the call
  */
-export async function postApi(path: string, body: ShortenerType) {
+export async function postApi(path: string, body: { longURL: string }) {
   return callApi(path, {
     ...options,
     method: 'POST',

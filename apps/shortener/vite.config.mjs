@@ -59,7 +59,8 @@ export default defineConfig(({ command, mode }) => {
 
       reporters: ['default'],
       coverage: {
-        reportsDirectory: '../../coverage/apps/shortener',
+        reportsDirectory: '../../dist/apps/coverage-test-frontend',
+        enabled: true,
         provider: 'v8',
       },
     },

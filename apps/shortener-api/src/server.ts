@@ -77,6 +77,10 @@ export class Server extends Base {
       `/${ENVIRONMENT.API.VERSION}/test/backend`,
       express.static(__dirname + '/../coverage-test-backend/lcov-report')
     );
+    this.#app.use(
+      `/${ENVIRONMENT.API.VERSION}/test/frontend`,
+      express.static(__dirname + '/../coverage-test-frontend')
+    );
     this.#app.use('/', express.static(__dirname + '/../shortener'));
     this.#app.use('/', RedirectRoute);
     this.#app.use(`/${ENVIRONMENT.API.VERSION}/shortener`, ShortenerRoute);

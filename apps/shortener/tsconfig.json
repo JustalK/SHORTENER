@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": false,
     "esModuleInterop": false,
@@ -8,8 +9,35 @@
     "types": ["vite/client", "vitest"],
     "baseUrl": ".",
     "paths": {
+      "@root/*": [
+        "../../*"
+      ],
+      "@apps/*": [
+        "./src/apps/*"
+      ],
+      "@assets/*": [
+        "./src/pages/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@interfaces/*": [
+        "./src/interfaces/*"
+      ],
+      "@libs/*": [
+        "./src/libs/*"
+      ],
+      "@materials/*": [
+        "./src/materials/*"
+      ],
       "@pages/*": [
         "./src/pages/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
       ],
     },
   },

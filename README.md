@@ -48,7 +48,9 @@ The documentation can be consulted at: [http://localhost:3333/v1/docs](http://lo
 
 ![0.png](./documentations/images/swagger/0.png)
 
-#### Setting Jest for unit tests
+#### Setting Jest for unit tests and coverage
+
+###### Backend
 
 In order to configure the test on the shortener-api, you need to add a target in the `project.json` of the shortener-api project:
 
@@ -101,6 +103,46 @@ You can then access the result through the url: [http://localhost:3333/v1/test/b
 PS: Since we are using the "test" command, the environment variable is "test". The environment file need to be set in consequence.
 
 ![0.png](./documentations/images/units-test/0.png)
+
+PS2: If some test such as import let the server open, it's possible to force the exit and to make the test pass with this command
+
+```bash
+nx test shortener-api --detectOpenHandles --forceExit 
+```
+
+###### Frontend
+
+For the react app, it's easier. Jest is already setup. However, we need to modify a bit the config in `vite.config.mjs`.
+In the section **test**, we can add the following:
+
+```mjs
+    test: {
+      coverage: {
+        reportsDirectory: '../../dist/apps/coverage-test-frontend',
+        enabled: true,
+        provider: 'v8',
+      },
+    },
+```
+
+Once done, we can add the route to serve our index as a static resource:
+
+```js
+    this.#app.use(
+      `/${ENVIRONMENT.API.VERSION}/test/backend`,
+      express.static(__dirname + '/../coverage-test-backend/lcov-report')
+    );
+```
+
+In order to generate the result, run the following command:
+
+```bash
+$ nx test shortener
+# OR
+$ npm run test-unit-frotend
+```
+
+You can then access the result through the url: [http://localhost:3333/v1/test/frontend/](http://localhost:3333/v1/test/frontend/)
 
 #### Typescript
 

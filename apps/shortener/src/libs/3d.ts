@@ -1,6 +1,6 @@
 import { MutableRefObject } from 'react';
 import * as THREE from 'three';
-import FogMaterial from '../materials/FogMaterial';
+import FogMaterial from '@materials/FogMaterial';
 import { ShaderMaterial, PerspectiveCamera, WebGLRenderer } from 'three';
 
 /**

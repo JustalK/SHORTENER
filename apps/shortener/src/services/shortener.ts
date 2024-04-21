@@ -1,4 +1,4 @@
-import { postApi, getApi } from './api/api';
+import { postApi, getApi } from '@services/api/api';
 
 /**
  * Handle the post to the api
