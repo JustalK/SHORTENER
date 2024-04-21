@@ -1,4 +1,10 @@
-# URL SHORTENER
+# SHORTENER
+
+## Goal
+
+This project is a shortener of URL I have done in a interview for a job. Since the project was quite cool and interesting, I pushed it further and try to make a project the most complete as possible. The project has typescript, unit test, smoke test, e2e test, tyescript coverage, dockerization, documentation, sonar analyzis and a lot of other things...
+
+For this project, I have used `Nx` to create the structure, `React` for the frontend, `Express` for the backend and `cypress`, `jest` for the testing. I have also used `sonar`, `docker`, `docker-compose`. For the database, I have used `mongodb` and `mongoose` as an ORM.
 
 ## Plan of the presentation
 
